@@ -41,6 +41,7 @@ li{margin-bottom:6px}
 a{color:var(--accent)}
 mark{background:var(--mark-bg);color:var(--mark-ink);padding:1px 5px;border-radius:4px}
 code{font:500 13px "JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);padding:2px 6px;border-radius:5px;overflow-wrap:anywhere}
+td code{white-space:nowrap;overflow-wrap:normal}
 .summary{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;margin:0 0 8px}
 .summary p{margin:0}
 .summary p+p{margin-top:8px}
@@ -68,7 +69,7 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
   <p class="eyebrow">The Honest Tag</p>
   <h1>Cookie Policy</h1>
   <p class="lede">What we store on your device, why, and how to change your mind at any time.</p>
-  <p class="updated">Last updated: 18 October 2026</p>
+  <p class="updated">Last updated: 29 October 2026</p>
 
   <div class="summary">
     <p><strong>In short:</strong> the site works without any cookies you have to approve. Analytics cookies from Google are set <strong>only if you click “Accept all”</strong>, or switch Analytics on under “Manage preferences”. If you click “Reject all”, nothing is sent to Google.</p>
@@ -106,7 +107,8 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
     </table>
   </div>
   <p>The calculator itself sets <strong>no cookies</strong> and does not recognise you when you come back. The only cookie from this site is <code>cc_cookie</code>, and it is created only after you make a choice in the cookie banner. It exists so that we don’t ask you again on every visit, and its 6-month lifetime follows common practice for consent choices.</p>
-  <p><strong>Browser storage (not cookies).</strong> If you use the language switch or the optional save features, your browser can keep up to three items in its local storage: <code>honesttag.lang</code> (your language choice), <code>tca.scenarios</code> (scenarios you choose to save), and <code>honesttag.lca.v2</code> (changes you make on the Data &amp; Assumptions page). They stay on your device, are never sent to us or to anyone else, and are used only so that your own work is still there next time. You can remove them by deleting your browser’s site data.</p>
+  <p><strong>Browser storage (not cookies).</strong> If you use the language switch, build a garment on the Home page or use the optional save features, your browser can keep up to four items in its local storage: <code>honesttag.lang</code> (your language choice), <code>honesttag.handoff</code> (the garment you built on the Home page, so the LCA Deep Dive can show it), <code>tca.scenarios</code> (scenarios you choose to save), and <code>honesttag.lca.v2</code> (changes you make on the Data &amp; Assumptions page). They stay on your device, are never sent to us or to anyone else, and are used only so that your own work is still there next time. You can remove them by deleting your browser’s site data.</p>
+  <p><strong>Photo reading.</strong> If you use the photo button on the “Read your tag” tab, your browser downloads a text-reading program (Tesseract.js, a few MB) from jsDelivr, a public content delivery network, the first time only. As with any web request, jsDelivr can see your IP address. Your photo is read on your device and is never uploaded to us or to anyone else.</p>
 
   <h2>What Google Analytics measures</h2>
   <p>If you accept analytics, we use Google Analytics 4 to count visits and to see which garments, fibres, origins and freight modes people pick, and how often the Copy and Print buttons are used, so we can improve the site. We never receive anything you type, such as a custom weight or city.</p>
@@ -124,7 +126,7 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
   <p class="eyebrow">The Honest Tag</p>
   <h1>Informativa sui cookie</h1>
   <p class="lede">Cosa memorizziamo sul tuo dispositivo, perché, e come cambiare idea in qualsiasi momento.</p>
-  <p class="updated">Ultimo aggiornamento: 20 ottobre 2026</p>
+  <p class="updated">Ultimo aggiornamento: 29 ottobre 2026</p>
 
   <div class="summary">
     <p><strong>In breve:</strong> il sito funziona senza cookie da approvare. I cookie di analisi di Google vengono impostati <strong>solo se clicchi «Accetta tutti»</strong>, oppure attivi Analisi in «Gestisci preferenze». Se clicchi «Rifiuta tutti», nulla viene inviato a Google.</p>
@@ -162,7 +164,8 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
     </table>
   </div>
   <p>Il calcolatore in sé <strong>non imposta cookie</strong> e non ti riconosce quando ritorni. L'unico cookie di questo sito è <code>cc_cookie</code>, creato solo dopo che hai fatto una scelta nel banner dei cookie. Serve a non chiedertela di nuovo a ogni visita e la sua durata di 6 mesi segue la prassi comune per le scelte di consenso.</p>
-  <p><strong>Archiviazione del browser (non cookie).</strong> Se usi il cambio lingua o le funzioni di salvataggio opzionali, il tuo browser può conservare fino a tre elementi nella memoria locale: <code>honesttag.lang</code> (la lingua scelta), <code>tca.scenarios</code> (gli scenari che scegli di salvare) e <code>honesttag.lca.v2</code> (le modifiche fatte nella pagina Metodologia). Restano sul tuo dispositivo, non vengono mai inviati a noi né ad altri, e servono solo a ritrovare il tuo lavoro la volta successiva. Puoi rimuoverli cancellando i dati del sito dal browser.</p>
+  <p><strong>Archiviazione del browser (non cookie).</strong> Se usi il cambio lingua, crei un capo nella Home o usi le funzioni di salvataggio opzionali, il tuo browser può conservare fino a quattro elementi nella memoria locale: <code>honesttag.lang</code> (la lingua scelta), <code>honesttag.handoff</code> (il capo creato nella Home, perché l’Approfondimento LCA possa mostrarlo), <code>tca.scenarios</code> (gli scenari che scegli di salvare) e <code>honesttag.lca.v2</code> (le modifiche fatte nella pagina Metodologia). Restano sul tuo dispositivo, non vengono mai inviati a noi né ad altri, e servono solo a ritrovare il tuo lavoro la volta successiva. Puoi rimuoverli cancellando i dati del sito dal browser.</p>
+  <p><strong>Lettura da foto.</strong> Se usi il pulsante della foto nella scheda «Leggi la tua etichetta», il tuo browser scarica un programma di lettura del testo (Tesseract.js, pochi MB) da jsDelivr, una rete pubblica di distribuzione di contenuti, solo la prima volta. Come per qualsiasi richiesta web, jsDelivr può vedere il tuo indirizzo IP. La foto viene letta sul tuo dispositivo e non viene mai caricata da noi né da altri.</p>
 
   <h2>Cosa misura Google Analytics</h2>
   <p>Se accetti l'analisi, usiamo Google Analytics 4 per contare le visite e vedere quali capi, fibre, origini e modalità di trasporto vengono scelti e quanto spesso si usano i pulsanti Copia e Stampa, così da migliorare il sito. Non riceviamo mai ciò che scrivi, come un peso o una città personalizzati.</p>
@@ -180,7 +183,7 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
   <p class="eyebrow">The Honest Tag</p>
   <h1>Política de cookies</h1>
   <p class="lede">Qué guardamos en tu dispositivo, por qué, y cómo cambiar de opinión en cualquier momento.</p>
-  <p class="updated">Última actualización: 20 de octubre de 2026</p>
+  <p class="updated">Última actualización: 29 de octubre de 2026</p>
 
   <div class="summary">
     <p><strong>En resumen:</strong> el sitio funciona sin ninguna cookie que tengas que aprobar. Las cookies de analítica de Google se instalan <strong>solo si pulsas «Aceptar todas»</strong>, o activas Analítica en «Gestionar preferencias». Si pulsas «Rechazar todas», no se envía nada a Google.</p>
@@ -218,7 +221,8 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
     </table>
   </div>
   <p>La calculadora en sí <strong>no instala cookies</strong> y no te reconoce cuando vuelves. La única cookie de este sitio es <code>cc_cookie</code>, y se crea solo después de que hagas una elección en el aviso de cookies. Existe para no volver a preguntártelo en cada visita, y su duración de 6 meses sigue la práctica habitual para las elecciones de consentimiento.</p>
-  <p><strong>Almacenamiento del navegador (no son cookies).</strong> Si usas el selector de idioma o las funciones opcionales de guardado, tu navegador puede conservar hasta tres elementos en su almacenamiento local: <code>honesttag.lang</code> (el idioma elegido), <code>tca.scenarios</code> (los escenarios que decidas guardar) y <code>honesttag.lca.v2</code> (los cambios que hagas en la página de Metodología). Permanecen en tu dispositivo, nunca se envían a nosotros ni a nadie más, y solo sirven para que tu trabajo siga ahí la próxima vez. Puedes eliminarlos borrando los datos del sitio en tu navegador.</p>
+  <p><strong>Almacenamiento del navegador (no son cookies).</strong> Si usas el selector de idioma, creas una prenda en la página de Inicio o usas las funciones opcionales de guardado, tu navegador puede conservar hasta cuatro elementos en su almacenamiento local: <code>honesttag.lang</code> (el idioma elegido), <code>honesttag.handoff</code> (la prenda que creaste en Inicio, para que el Análisis LCA pueda mostrarla), <code>tca.scenarios</code> (los escenarios que decidas guardar) y <code>honesttag.lca.v2</code> (los cambios que hagas en la página de Metodología). Permanecen en tu dispositivo, nunca se envían a nosotros ni a nadie más, y solo sirven para que tu trabajo siga ahí la próxima vez. Puedes eliminarlos borrando los datos del sitio en tu navegador.</p>
+  <p><strong>Lectura por foto.</strong> Si usas el botón de foto de la pestaña «Lee tu etiqueta», tu navegador descarga un programa de lectura de texto (Tesseract.js, unos MB) desde jsDelivr, una red pública de distribución de contenidos, solo la primera vez. Como en cualquier petición web, jsDelivr puede ver tu dirección IP. La foto se lee en tu dispositivo y nunca se sube a nosotros ni a nadie más.</p>
 
   <h2>Qué mide Google Analytics</h2>
   <p>Si aceptas la analítica, usamos Google Analytics 4 para contar las visitas y ver qué prendas, fibras, orígenes y modos de transporte se eligen, y con qué frecuencia se usan los botones Copiar e Imprimir, con el fin de mejorar el sitio. Nunca recibimos lo que escribes, como un peso o una ciudad personalizados.</p>
@@ -236,7 +240,7 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
   <p class="eyebrow">The Honest Tag</p>
   <h1>Cookie-Richtlinie</h1>
   <p class="lede">Was wir auf deinem Gerät speichern, warum, und wie du deine Meinung jederzeit ändern kannst.</p>
-  <p class="updated">Zuletzt aktualisiert: 20. Oktober 2026</p>
+  <p class="updated">Zuletzt aktualisiert: 29. Oktober 2026</p>
 
   <div class="summary">
     <p><strong>Kurz gesagt:</strong> Die Website funktioniert ohne Cookies, die du bestätigen müsstest. Die Analyse-Cookies von Google werden <strong>nur gesetzt, wenn du auf „Alle akzeptieren“ klickst</strong> oder unter „Einstellungen verwalten“ die Analyse aktivierst. Wenn du auf „Alle ablehnen“ klickst, wird nichts an Google gesendet.</p>
@@ -274,7 +278,8 @@ footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);font-si
     </table>
   </div>
   <p>Der Rechner selbst <strong>setzt keine Cookies</strong> und erkennt dich nicht wieder, wenn du zurückkommst. Das einzige Cookie dieser Website ist <code>cc_cookie</code>; es wird erst angelegt, nachdem du im Cookie-Hinweis eine Auswahl getroffen hast. Es dient dazu, dich nicht bei jedem Besuch erneut zu fragen, und seine Dauer von 6 Monaten entspricht der üblichen Praxis für Einwilligungsentscheidungen.</p>
-  <p><strong>Speicher des Browsers (keine Cookies).</strong> Wenn du den Sprachwechsel oder die optionalen Speicherfunktionen nutzt, kann dein Browser bis zu drei Einträge in seinem lokalen Speicher ablegen: <code>honesttag.lang</code> (deine Sprachauswahl), <code>tca.scenarios</code> (Szenarien, die du speichern möchtest) und <code>honesttag.lca.v2</code> (Änderungen, die du auf der Seite Daten &amp; Annahmen vornimmst). Sie bleiben auf deinem Gerät, werden weder an uns noch an Dritte gesendet und dienen nur dazu, dass deine eigene Arbeit beim nächsten Mal noch da ist. Du kannst sie entfernen, indem du die Websitedaten deines Browsers löschst.</p>
+  <p><strong>Speicher des Browsers (keine Cookies).</strong> Wenn du den Sprachwechsel nutzt, auf der Startseite ein Kleidungsstück erstellst oder die optionalen Speicherfunktionen verwendest, kann dein Browser bis zu vier Einträge in seinem lokalen Speicher ablegen: <code>honesttag.lang</code> (deine Sprachauswahl), <code>honesttag.handoff</code> (das Kleidungsstück, das du auf der Startseite erstellt hast, damit LCA im Detail es anzeigen kann), <code>tca.scenarios</code> (Szenarien, die du speichern möchtest) und <code>honesttag.lca.v2</code> (Änderungen, die du auf der Seite Daten &amp; Annahmen vornimmst). Sie bleiben auf deinem Gerät, werden weder an uns noch an Dritte gesendet und dienen nur dazu, dass deine eigene Arbeit beim nächsten Mal noch da ist. Du kannst sie entfernen, indem du die Websitedaten deines Browsers löschst.</p>
+  <p><strong>Foto lesen.</strong> Wenn du auf dem Tab „Etikett lesen“ den Foto-Button nutzt, lädt dein Browser beim ersten Mal ein Programm zum Texterkennen (Tesseract.js, einige MB) von jsDelivr herunter, einem öffentlichen Content-Delivery-Netzwerk. Wie bei jeder Webanfrage kann jsDelivr deine IP-Adresse sehen. Dein Foto wird auf deinem Gerät gelesen und weder an uns noch an andere hochgeladen.</p>
 
   <h2>Was Google Analytics misst</h2>
   <p>Wenn du die Analyse akzeptierst, nutzen wir Google Analytics 4, um Besuche zu zählen und zu sehen, welche Kleidungsstücke, Fasern, Herkunftsländer und Transportarten gewählt werden und wie oft die Schaltflächen Kopieren und Drucken verwendet werden, um die Website zu verbessern. Was du selbst eingibst, etwa ein eigenes Gewicht oder eine eigene Stadt, erhalten wir nie.</p>

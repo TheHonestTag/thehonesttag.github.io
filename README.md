@@ -12,6 +12,7 @@ The Honest Tag estimates the environmental impact of garments (T-shirts, jeans, 
 |---|---|
 | `index.html` | Home page: follow a garment from field to bin, and read your own label |
 | `calculator.html` | The full calculator |
+| `learn.html` | Learn page: short, sourced facts about clothes and the environment |
 | `app3.js` | The calculator's code and data |
 | `ht-i18n.js` | Translations for the calculator (IT, ES, DE) |
 | `cookie-policy.html` | Cookie policy |
