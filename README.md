@@ -1,10 +1,10 @@
-# TheHonestTag
+# Hangnote
 
 LCA Apparel Calculation Engine. Cradle-to-Grave
 
 **Live site:** https://thehonesttag.github.io/
 
-The Honest Tag estimates the environmental impact of garments (T-shirts, jeans, hoodies and more) across their whole life cycle: carbon footprint, water footprint and microplastic shedding, from fibre production to end of life. Available in English, Italian, Spanish and German.
+Hangnote estimates the environmental impact of garments (T-shirts, jeans, hoodies and more) across their whole life cycle: carbon footprint, water footprint and microplastic shedding, from fibre production to end of life. Available in English, Italian, Spanish and German.
 
 ## Files
 
