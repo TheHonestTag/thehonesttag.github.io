@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M22 6 H42 L52 16 V44 a4 4 0 0 1 -4 4 H30 L20 57 V48 H16 a4 4 0 0 1 -4 -4 V16 Z%27 stroke=%2314181F stroke-width=%273.5%27 stroke-linejoin=%27round%27/%3E%3Ccircle cx=%2732%27 cy=%2716%27 r=%273.5%27 stroke=%230071E3 stroke-width=%273.5%27/%3E%3Cpath d=%27M22 29 H42 M22 37 H35%27 stroke=%2314181F stroke-width=%273.5%27/%3E%3C/svg%3E">
+<meta name="description" content="Your garment as a cradle-to-grave life cycle estimate in four phases: functional unit, process tree and inventory, impacts and interpretation.">
+<link rel="canonical" href="https://hangnote.de/breakdown.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hangnote">
+<meta property="og:title" content="Full Breakdown – Hangnote">
+<meta property="og:description" content="Your garment as a cradle-to-grave life cycle estimate in four phases: functional unit, process tree and inventory, impacts and interpretation.">
+<meta property="og:url" content="https://hangnote.de/breakdown.html">
+<meta property="og:image" content="https://hangnote.de/og.png">
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Full Breakdown – Hangnote</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* Layout: one long study report in four LCA phases, a sticky result strip, wide diagrams in their own scroll boxes */
+:root{
+  --paper:#F5F5F7; --card:#FFFFFF; --ink:#1D1D1F; --muted:#5E5E64; --rule:#D2D2D7; --soft:#E8E8ED; --sel:#0071E3; --on-sel:#FFFFFF;
+  --accent:#0066CC; --good:#2E7D5B; --bad:#9E3A22; --warn:#A86500;
+  --s-raw:#84CC16; --s-yarn:#3B82F6; --s-wet:#6366F1; --s-asm:#A855F7; --s-fr:#F59E0B; --s-use:#06B6D4; --s-eol:#F43F5E;
+  --k-co2:#3A3A3C; --k-water:#0A84C6; --k-mp:#D9480F;
+  --shadow:0 24px 60px -24px rgba(0,0,0,.28); --lift:0 1px 2px rgba(0,0,0,.04),0 8px 24px -12px rgba(0,0,0,.08); --lift-s:0 1px 2px rgba(0,0,0,.05);
+  --display:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Inter,Archivo,system-ui,sans-serif; --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Inter,Archivo,system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#000000; --card:#1C1C1E; --ink:#F5F5F7; --muted:#A1A1A6; --rule:#38383A; --soft:#2C2C2E; --sel:#0A6CD6; --on-sel:#FFFFFF;
+  --accent:#2997FF; --good:#5CC093; --bad:#E7765C; --warn:#E3A33C;
+  --k-co2:#D1D1D6; --k-water:#4FB3F0; --k-mp:#FF8A50;
+  --shadow:0 18px 40px -22px rgba(0,0,0,.8); --lift:0 0 0 .5px rgba(255,255,255,.06); --lift-s:0 0 0 .5px rgba(255,255,255,.06); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#000000; --card:#1C1C1E; --ink:#F5F5F7; --muted:#A1A1A6; --rule:#38383A; --soft:#2C2C2E; --sel:#0A6CD6; --on-sel:#FFFFFF;
+  --accent:#2997FF; --good:#5CC093; --bad:#E7765C; --warn:#E3A33C;
+  --k-co2:#D1D1D6; --k-water:#4FB3F0; --k-mp:#FF8A50;
+  --shadow:0 18px 40px -22px rgba(0,0,0,.8); --lift:0 0 0 .5px rgba(255,255,255,.06); --lift-s:0 0 0 .5px rgba(255,255,255,.06); color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--paper)}
+.wrap{max-width:1120px;margin:0 auto}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(24px,3.4vw,34px);line-height:1.1;font-weight:800}
+h3{font-size:17px;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--sel)}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:18px}
+.badge{display:inline-flex;align-items:center;gap:5px;font:600 10.5px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:4px 7px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+.b-model{color:var(--good);border-color:color-mix(in srgb,var(--good) 40%,var(--rule))}
+.b-derived{color:var(--sel);border-color:color-mix(in srgb,var(--sel) 40%,var(--rule))}
+.b-assume{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--rule))}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px 8px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.02em;color:var(--ink);text-decoration:none;flex:0 0 auto}
+.langnote{margin-top:12px;font-size:13px;color:var(--warn)}
+.fromhome{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;color:var(--good)}
+.brand svg{width:26px;height:26px;color:var(--ink)}
+.proto{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--warn);border:1px dashed color-mix(in srgb,var(--warn) 60%,transparent);padding:5px 8px;border-radius:999px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:center;padding-block:22px 18px}
+.hero h1{font-size:clamp(30px,4.8vw,52px);line-height:1.02;font-weight:800;letter-spacing:-.035em}
+.hero h1 em{font-style:normal;color:var(--muted)}
+.hero .lede{margin-top:14px;font-size:17px;color:var(--muted);max-width:56ch}
+.std{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.iso{display:grid;grid-template-columns:minmax(0,1fr) 44px minmax(0,.62fr);gap:0;align-items:stretch}
+.iso-col{display:grid;gap:10px}
+.iso a{display:flex;flex-direction:column;gap:3px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:13px 14px;transition:border-color .2s,transform .2s,box-shadow .2s}
+.iso a:hover{border-color:var(--sel);transform:translateY(-1px);box-shadow:var(--shadow)}
+.iso a.on{border-color:var(--sel);box-shadow:0 0 0 3px color-mix(in srgb,var(--sel) 18%,transparent)}
+.iso a b{font-size:15px;letter-spacing:-.01em}
+.iso a span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.iso a i{font:600 10.5px/1 var(--mono);font-style:normal;color:var(--muted);letter-spacing:.06em}
+.iso .vgap{display:flex;justify-content:center;color:var(--muted);font-size:14px;line-height:1;margin:-4px 0}
+.iso .links{display:grid;grid-template-rows:repeat(3,1fr);align-items:center;justify-items:center;color:var(--muted)}
+.iso .links svg{width:30px;height:12px}
+.iso .interp{height:100%;justify-content:center}
+.iso-cap{grid-column:1/-1;margin-top:8px;font-size:11.5px;color:var(--muted)}
+
+/* sticky result strip */
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--rule)}
+.strip-in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fu-mini{flex:1 1 240px;min-width:0;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fu-mini b{color:var(--ink);font-weight:600}
+.kpis{display:flex;gap:6px;flex-wrap:wrap}
+.kpi{display:flex;align-items:center;gap:8px;padding:6px 11px 6px 8px;border-radius:999px;border:1px solid var(--rule);background:var(--card);cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.kpi .dot{width:9px;height:9px;border-radius:50%}
+.kpi b{font:600 13px/1 var(--mono)}
+.kpi small{font-size:11.5px;color:var(--muted)}
+.kpi[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+
+/* sections */
+section.phase{padding-block:46px 8px;border-top:1px solid var(--rule);margin-top:34px}
+.ph-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 18px;align-items:end;margin-bottom:22px}
+.ph-n{grid-row:1/3;font:800 clamp(44px,6vw,72px)/.82 var(--display);letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1.4px var(--rule)}
+.ph-head p{color:var(--muted);max-width:70ch}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pad{padding:20px 22px}
+.sub{margin:30px 0 12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* goal list */
+.dl{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px 16px;margin-top:14px;font-size:14px}
+.dl dt{color:var(--muted);font-size:12.5px;padding-top:2px}
+.dl dd{margin:0}
+
+/* hang tag (functional unit) */
+.tagwrap{display:flex;justify-content:center;padding:10px 0}
+.hangtag{position:relative;width:min(100%,380px);background:var(--card);border:1px solid var(--rule);border-radius:16px 16px 22px 22px;padding:44px 24px 22px;box-shadow:var(--shadow)}
+.hangtag::before{content:"";position:absolute;top:16px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--paper);border:1px solid var(--rule)}
+.hangtag::after{content:"";position:absolute;top:-34px;left:50%;width:1.5px;height:52px;background:var(--muted);transform:rotate(14deg);transform-origin:bottom}
+.hangtag .eyebrow{text-align:center}
+.fu-text{margin-top:10px;font-size:19px;line-height:1.3;font-weight:700;letter-spacing:-.015em;text-align:center;text-wrap:balance}
+.tagrows{margin-top:16px;border-top:1px dashed var(--rule)}
+.tagrows div{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px dashed var(--rule);font-size:13px}
+.tagrows div span:first-child{color:var(--muted)}
+.tagrows div span:last-child{font-family:var(--mono);text-align:right}
+
+/* controls */
+.ctl{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,172px),1fr));gap:12px 14px;margin-top:4px}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.f label{font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.01em}
+.f select,.f input[type=number]{width:100%;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:8px 10px;font-size:14px}
+.f input[type=range]{width:100%;accent-color:var(--sel)}
+.f .rv{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.seg{display:flex;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;border-radius:7px;padding:6px 4px;font-size:13px;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.hint{font-size:12px;color:var(--muted);margin-top:10px}
+
+/* system boundary */
+.sb{position:relative;margin-top:6px;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px}
+.sb-in{position:relative;border:1.5px dashed color-mix(in srgb,var(--ink) 45%,transparent);border-radius:20px;padding:18px 16px 16px;background:color-mix(in srgb,var(--card) 55%,transparent)}
+.sb-tag{position:absolute;top:-10px;left:18px;background:var(--paper);padding:0 8px;font:600 11px/20px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.flows{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.flow{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--soft);color:var(--ink);white-space:nowrap}
+.flow.out{background:transparent;border:1px solid var(--rule)}
+.arrows{display:flex;justify-content:center;gap:40px;color:var(--muted);font-size:16px;line-height:1;margin:6px 0}
+.chain{display:flex;align-items:stretch;gap:0;margin:4px 0}
+.chain .end{display:flex;align-items:center;font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl;transform:rotate(180deg);padding:0 4px}
+.chain .end.g{transform:none}
+.stg{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px;padding:10px 8px;border-radius:12px;background:var(--card);border:1px solid var(--rule);position:relative;cursor:pointer;transition:transform .15s,border-color .15s}
+.stg:hover,.stg.on{border-color:var(--c);transform:translateY(-2px)}
+.stg::before{content:"";position:absolute;inset:0 0 auto;height:4px;border-radius:12px 12px 0 0;background:var(--c)}
+.stg b{font-size:12.5px;line-height:1.2;letter-spacing:-.01em}
+.stg small{font-size:11px;color:var(--muted);line-height:1.3}
+.stg .loc{font:600 10px/1 var(--mono);color:var(--muted);letter-spacing:.04em}
+.chain .ar{display:flex;align-items:center;color:var(--muted);padding:0 2px;font-size:12px}
+.sb-out{border-radius:16px;border:1px solid var(--rule);padding:14px 14px 12px;background:var(--card)}
+.sb-out h3{font-size:13px;margin-bottom:8px}
+.sb-out li{font-size:12.5px;color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 55%,transparent);margin-bottom:5px}
+.sb-out ul{margin:0;padding-left:16px}
+.stg-detail{margin-top:12px;font-size:13.5px;color:var(--muted);min-height:2.6em}
+.stg-detail b{color:var(--ink)}
+
+/* category cards */
+.cat{display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px;position:relative;overflow:hidden}
+.cat .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--k) 14%,transparent);color:var(--k)}
+.cat .ic svg{width:19px;height:19px}
+.cat dl{display:grid;grid-template-columns:86px minmax(0,1fr);gap:4px 10px;margin:4px 0 0;font-size:12.5px}
+.cat dt{color:var(--muted)}
+.cat dd{margin:0}
+.settings{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:10px;margin-top:4px}
+.setting{padding:13px 15px;border-radius:14px;background:var(--card);border:1px solid var(--rule);font-size:13px}
+.setting b{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:3px}
+
+/* process tree */
+.tree-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.tree-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.treebox{overflow:auto;border-radius:18px;border:1px solid var(--rule);background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--muted) 22%,transparent) 1px,transparent 0) 0 0/18px 18px,var(--card)}
+#tree{margin:0 auto}
+#tree{display:block}
+#tree .nd{cursor:pointer}
+#tree .nd rect.box{fill:var(--card);stroke:var(--rule);stroke-width:1}
+#tree .nd.bg rect.box{fill:var(--paper)}
+#tree .nd:hover rect.box,#tree .nd:focus-visible rect.box{stroke:var(--ink)}
+#tree .nd.sel rect.box{stroke:var(--sel);stroke-width:2}
+#tree .nd.path rect.box{stroke:var(--ink)}
+#tree .nd:focus{outline:none}
+#tree text{fill:var(--ink);font:500 11px var(--body)}
+#tree text.amt{fill:var(--muted);font:500 10px var(--mono)}
+#tree .edge{fill:none;transition:stroke-width .35s,opacity .2s}
+#tree .edge.dim{opacity:.18}
+#tree .shbar{fill:var(--soft)}
+.panel{padding:20px 22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 28px;align-items:start}
+.panel .phd{grid-column:1/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:6px}
+.panel .phd h3{margin:0}
+.panel .pcol{min-width:0}
+.panel .pn{font:600 11px/1.35 var(--mono);color:var(--muted);word-break:break-word}
+.panel h3{margin:6px 0 4px}
+.panel table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px}
+.panel td{padding:5px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.panel td:last-child{text-align:right;font-family:var(--mono);white-space:nowrap;padding-left:8px}
+.panel .tl{font:600 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+.cumrow{display:grid;grid-template-columns:70px minmax(0,1fr) 64px;gap:8px;align-items:center;font-size:12px;margin-top:7px}
+.cumrow .tr{height:8px;border-radius:99px;background:var(--soft);overflow:hidden}
+.cumrow .tr i{display:block;height:100%;border-radius:99px}
+.cumrow span:last-child{text-align:right;font-family:var(--mono)}
+.panel .basis{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.45}
+
+/* LCI table */
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--rule);background:var(--card);border-radius:999px;padding:6px 11px;font-size:12.5px;cursor:pointer;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tablebox{overflow-x:auto;border-radius:16px;border:1px solid var(--rule);background:var(--card)}
+table.lci{width:100%;border-collapse:collapse;min-width:720px;font-size:13px}
+.lci th{position:sticky;top:0;background:var(--card);text-align:left;font:600 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 12px;border-bottom:1px solid var(--rule)}
+.lci td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:middle}
+.lci tr:last-child td{border-bottom:0}
+.lci td.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+.lci th.n{text-align:right}
+.lci .grp td{background:var(--paper);font-weight:700;font-size:12.5px;padding:8px 12px}
+.lci .grp td{padding:0}
+.gbtn{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;cursor:pointer;font-weight:700;font-size:13.5px}
+.gbtn:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.gbtn:focus-visible{outline:2px solid var(--sel);outline-offset:-2px}
+.gbtn .chev{display:inline-block;width:12px;color:var(--muted);font-size:16px;line-height:1;transition:transform .2s}
+.gbtn[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.gbtn .sw{display:inline-block;width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.gbtn .gc{font-weight:500;color:var(--muted);font-size:12.5px}
+.gbtn .gv{margin-left:auto;font-weight:600;font-size:12.5px}
+.chip-x{color:var(--accent)}
+.dir{font:600 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:3px 6px;border-radius:5px;background:var(--soft);color:var(--muted)}
+.dir.el{background:color-mix(in srgb,var(--k-water) 14%,transparent);color:var(--k-water)}
+.dir.em{background:color-mix(in srgb,var(--k-mp) 14%,transparent);color:var(--k-mp)}
+.note{margin-top:12px;font-size:12.5px;color:var(--muted);max-width:90ch}
+
+/* LCIA */
+.cat-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.ctab{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;border:1px solid var(--rule);background:var(--card);cursor:pointer;font-weight:600;font-size:14px}
+.ctab[aria-pressed="true"]{border-color:var(--k);box-shadow:inset 0 0 0 1px var(--k);color:var(--k)}
+.ctab svg{width:16px;height:16px}
+.lcia{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:18px;margin-top:16px}
+.big{padding:22px}
+.big .v{font:800 clamp(40px,6vw,62px)/1 var(--display);letter-spacing:-.04em;margin-top:10px}
+.big .u{font-size:15px;color:var(--muted);margin-top:4px}
+.big .row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--rule);font-size:13px}
+.big .row:first-of-type{margin-top:16px}
+.big .row span:last-child{font-family:var(--mono)}
+.wf{padding:20px 22px}
+.wfrow{display:grid;grid-template-columns:150px minmax(0,1fr) 92px;gap:12px;align-items:center;padding:6px 0}
+.wfrow .lb{font-size:13px;display:flex;align-items:center;gap:8px;min-width:0}
+.wfrow .lb i{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.wfrow .lb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wftrack{position:relative;height:22px;border-left:1px solid var(--rule)}
+.wftrack .seg2{position:absolute;top:2px;bottom:2px;border-radius:5px;min-width:2px;transition:left .45s cubic-bezier(.2,.7,.2,1),width .45s cubic-bezier(.2,.7,.2,1)}
+.wftrack .guide{position:absolute;top:-6px;bottom:-6px;border-left:1px dashed var(--rule)}
+.wfrow .v2{text-align:right;font:500 12.5px var(--mono)}
+.wfrow.tot{border-top:1px solid var(--rule);margin-top:6px;padding-top:12px}
+.wfrow.tot .lb{font-weight:700}
+.matrix{width:100%;border-collapse:separate;border-spacing:4px;font-size:13px}
+.matrix th{font:600 10.5px/1.2 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px}
+.matrix th:first-child{text-align:left}
+.matrix td{padding:10px 8px;border-radius:9px;text-align:center;font-family:var(--mono);font-size:12.5px}
+.matrix td:first-child{text-align:left;font-family:var(--body);font-size:13px;white-space:nowrap}
+.matrix td:first-child i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;vertical-align:-1px}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr));gap:8px}
+.stepx{display:flex;gap:10px;align-items:flex-start;padding:12px 13px;border-radius:12px;border:1px solid var(--rule);background:var(--card);font-size:12.5px}
+.stepx .st{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.st.y{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.st.p{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.st.n{background:var(--soft);color:var(--muted)}
+.stepx b{display:block;font-size:13px;margin-bottom:2px}
+
+/* interpretation */
+.hots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hot{padding:18px;display:flex;flex-direction:column;gap:10px}
+.hot .ring{width:74px;height:74px}
+.hot .top2{display:flex;align-items:center;gap:14px}
+.hot b{font-size:15px;line-height:1.25}
+.tor{padding:20px 22px}
+.trow{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule)}
+.trow:last-child{border-bottom:0}
+.trow .lb{font-size:13px}
+.trow .lb small{display:block;color:var(--muted);font-size:11.5px}
+.ttrack{position:relative;height:30px}
+.ttrack .axis{position:absolute;left:50%;top:-8px;bottom:-8px;border-left:1.5px solid var(--ink)}
+.ttrack .bar{position:absolute;top:7px;height:16px;border-radius:4px}
+.ttrack .lo{background:color-mix(in srgb,var(--good) 70%,transparent)}
+.ttrack .hi{background:color-mix(in srgb,var(--bad) 70%,transparent)}
+.ttrack .tv{position:absolute;top:8px;font:500 11px var(--mono);color:var(--muted);white-space:nowrap}
+.tleg{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:12px}
+.tleg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.unc{padding:20px 22px}
+.urow{display:grid;grid-template-columns:140px minmax(0,1fr) 150px;gap:14px;align-items:center;padding:10px 0}
+.utrack{position:relative;height:26px;background:linear-gradient(var(--rule),var(--rule)) 0 50%/100% 1px no-repeat}
+.utrack .rng{position:absolute;top:6px;height:14px;border-radius:99px;opacity:.28}
+.utrack .pt{position:absolute;top:4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 1px var(--rule)}
+.urow span:last-child{text-align:right;font:500 12px var(--mono)}
+.concl{padding:22px 24px;font-size:15px;line-height:1.6}
+.concl p+p{margin-top:10px}
+.concl ul{margin:10px 0 0;padding-left:18px}
+.concl li{margin-bottom:6px}
+.foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .tree-grid{grid-template-columns:minmax(0,1fr)}
+  .lcia{grid-template-columns:minmax(0,1fr)}
+  .sb{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .grid2,.grid3,.hots,.panel{grid-template-columns:minmax(0,1fr)}
+  .chain{flex-direction:column;gap:6px}
+  .chain .ar{justify-content:center;transform:rotate(90deg);padding:0}
+  .chain .end,.chain .end.g{writing-mode:horizontal-tb;transform:none;justify-content:center;padding:4px 0}
+  .stg{flex:none}
+  .dl{grid-template-columns:minmax(0,1fr)}
+  .dl dt{padding-top:6px}
+  .trow{grid-template-columns:minmax(0,1fr)}
+  .wfrow{grid-template-columns:104px minmax(0,1fr) 76px;gap:8px}
+  .urow{grid-template-columns:minmax(0,1fr) 110px}
+  .urow .utrack{grid-column:1/-1;grid-row:2}
+  .fu-mini{display:none}
+  .top{flex-wrap:wrap}
+  .iso{grid-template-columns:minmax(0,1fr) 28px minmax(0,.85fr)}
+  .iso a{padding:11px}
+  .iso a b{font-size:14px;overflow-wrap:anywhere}
+  .tabs{width:100%}
+  .kpi small{display:none}
+}
+
+/* ---- Site look: same header, type, cards and controls as the rest of hangnote ---- */
+body{font:16px/1.55 var(--body)}
+h1,h2,h3,h4{font-family:var(--display)}
+.hero h1{font-weight:700;letter-spacing:-.035em}
+h2{font-weight:700;letter-spacing:-.03em}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1.2 var(--body);letter-spacing:.06em}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:18px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;text-decoration:none;color:var(--ink);font-size:17px;letter-spacing:0}
+.brand svg{width:30px;height:30px}
+.brand span{font-family:Archivo,Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.035em;font-size:1.3em;line-height:1}
+.beta{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--accent) 75%,var(--ink));background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:980px;padding:2px 8px;margin-left:-2px}
+.topr{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+.tabs{display:flex;gap:4px;background:var(--soft);border-radius:12px;padding:3px;overflow-x:auto;scrollbar-width:none}
+.tabs a{display:inline-flex;align-items:center;border-radius:9px;padding:7px 13px;font-weight:600;font-size:14px;color:var(--muted);text-decoration:none;white-space:nowrap}
+.tabs a:hover{color:var(--ink)}
+.tabs a[aria-current="page"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(20,24,31,.12)}
+.langs{appearance:none;-webkit-appearance:none;font:inherit;font-size:13px;font-weight:600;color:var(--ink);border:1px solid var(--rule);border-radius:8px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%271.6%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") no-repeat right 9px center;padding:6px 26px 6px 10px;cursor:pointer;line-height:1.2}
+.card{border:0;border-radius:22px;box-shadow:var(--lift)}
+.treebox,.tablebox{border:0;border-radius:22px;box-shadow:var(--lift)}
+.hangtag{border:0;border-radius:18px 18px 24px 24px}
+.iso a{border-color:transparent;border-radius:16px;box-shadow:var(--lift-s)}
+.iso a:hover{border-color:transparent;box-shadow:0 4px 14px -6px rgba(0,0,0,.18)}
+.iso a.on{border-color:transparent;box-shadow:0 0 0 2px var(--sel)}
+.setting,.stepx,.sb-out,.stg,.ctab,.chip,.kpi{border-color:transparent;box-shadow:var(--lift-s)}
+.setting,.stepx,.sb-out{border-radius:16px}
+.stg:hover,.stg.on{border-color:transparent;box-shadow:0 0 0 2px var(--c)}
+.kpi[aria-pressed="true"]{background:var(--sel);border-color:var(--sel);color:var(--on-sel);box-shadow:none}
+.kpi[aria-pressed="true"] small{color:inherit;opacity:.85}
+.kpi[aria-pressed="true"] .dot{box-shadow:0 0 0 2px var(--on-sel)}
+.chip[aria-pressed="true"]{background:var(--sel);border-color:var(--sel);color:var(--on-sel)}
+.ctab[aria-pressed="true"]{border-color:transparent;box-shadow:0 0 0 2px var(--k)}
+.seg{border:0;background:var(--soft);border-radius:10px;padding:2px;gap:2px}
+.seg button{border-radius:8px}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.18),0 0 0 .5px rgba(0,0,0,.04)}
+.f select,.f input[type=number]{background:var(--soft);border-color:transparent;border-radius:10px}
+.flow{background:var(--soft)}
+.flow.out{background:transparent;border-color:var(--rule)}
+.ph-n{-webkit-text-stroke:1.4px color-mix(in srgb,var(--muted) 45%,transparent)}
+@media (max-width:767px){
+  .topr{display:contents}
+  .langs{margin-left:auto}
+  .tabs{order:3;width:100%}
+  .tabs a{padding:7px 10px;font-size:13px}
+  .tabs::-webkit-scrollbar{display:none}
+}
+@media (max-width:520px){.brand span{font-size:1.15em}}
+
+/* compact goal and scope */
+.gs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:stretch;margin-top:30px}
+.gs .hangtag{width:100%;padding:38px 22px 16px}
+.gs .fu-text{font-size:18px}
+.gs .tagrows{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
+.gs .tagrows div{font-size:12.5px;padding:6px 0}
+.gs-side{padding:20px 22px;display:grid;gap:16px;align-content:start;font-size:14px}
+.gs-side .eyebrow{margin-bottom:6px}
+.catchips{display:flex;flex-wrap:wrap;gap:6px}
+.catchip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;background:color-mix(in srgb,var(--k) 12%,transparent);color:var(--k);font-size:13px;font-weight:600}
+.catchip svg{width:15px;height:15px}
+.catchip small{font-weight:500;opacity:.8}
+#goal .chain{margin-top:18px}
+#goal .stg-detail{margin-top:8px;min-height:0;font-size:13px}
+details.more{margin-top:12px;border-radius:16px;background:var(--card);box-shadow:var(--lift-s)}
+details.more>summary{cursor:pointer;list-style:none;padding:13px 18px;font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"›";display:inline-block;color:var(--muted);font-size:17px;line-height:1;transition:transform .2s}
+details.more[open]>summary::before{transform:rotate(90deg)}
+details.more>.ctl,details.more>.hint,details.more>.dl{margin:0 18px 16px}
+details.more>.dl{margin-top:0}
+@media (max-width:760px){.gs{grid-template-columns:minmax(0,1fr)}.gs .tagrows{grid-template-columns:minmax(0,1fr)}
+  #goal .chain{flex-direction:row;overflow-x:auto;gap:0;padding:4px 2px 8px;scroll-snap-type:x proximity;scrollbar-width:thin}
+  #goal .chain .stg{flex:0 0 128px;scroll-snap-align:start}
+  #goal .chain .ar{transform:none;padding:0 3px}
+  #goal .chain .end{writing-mode:vertical-rl;transform:rotate(180deg);padding:0 4px}
+  #goal .chain .end.g{transform:none}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./" aria-label="Hangnote">
+      <svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 6 H42 L52 16 V44 a4 4 0 0 1 -4 4 H30 L20 57 V48 H16 a4 4 0 0 1 -4 -4 V16 Z" stroke="currentColor" stroke-width="3.5"/><circle cx="32" cy="16" r="3.5" stroke="#0071E3" stroke-width="3.5"/><path d="M22 29 H42 M22 37 H35" stroke="currentColor" stroke-width="3.5"/></svg>
+      <span>hangnote</span>
+      <em class="beta" id="beta" title="Beta: an early version. Estimates may change when the data and methods are updated.">Beta</em>
+    </a>
+    <div class="topr">
+      <nav class="tabs" id="tabs" aria-label="Site"><a href="./">Home</a><a href="./#read">Read your tag</a><a href="breakdown.html" aria-current="page">Full Breakdown</a><a href="calculator.html#data">Methodology</a><a href="learn.html">Learn</a><a href="about.html">About</a></nav>
+      <select class="langs" id="langs" aria-label="Language"><option value="en">English</option><option value="it">Italiano</option><option value="es">Español</option><option value="de">Deutsch</option></select>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Life cycle estimate · cradle to grave</p>
+      <h1 id="h1"></h1>
+      <p class="lede">Laid out in the four phases a life cycle assessment usually follows. Change the garment in phase 1 and every diagram, inventory line and result below recalculates from Hangnote's own model.</p>
+      <p class="langnote" id="langNote" hidden></p>
+      <p class="fromhome" id="fromHome" hidden>● Showing the garment you built on Home</p>
+      <div class="std"><span class="badge b-assume">Screening estimate, not a certified study</span></div>
+    </div>
+    <nav class="iso" aria-label="The four phases of a life cycle assessment">
+      <div class="iso-col">
+        <a href="#goal" data-ph="goal"><i>Phase 1</i><b>Goal and scope</b><span>Functional unit, system boundary, impact categories</span></a>
+        <div class="vgap" aria-hidden="true">⇅</div>
+        <a href="#inventory" data-ph="inventory"><i>Phase 2</i><b>Inventory analysis</b><span>Process tree and every input and output</span></a>
+        <div class="vgap" aria-hidden="true">⇅</div>
+        <a href="#impact" data-ph="impact"><i>Phase 3</i><b>Impact assessment</b><span>Climate change, water use, microplastics</span></a>
+      </div>
+      <div class="links" aria-hidden="true">
+        <svg viewBox="0 0 30 12"><path d="M2 6h26M6 2 2 6l4 4M24 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        <svg viewBox="0 0 30 12"><path d="M2 6h26M6 2 2 6l4 4M24 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        <svg viewBox="0 0 30 12"><path d="M2 6h26M6 2 2 6l4 4M24 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <a href="#interpretation" data-ph="interpretation" class="interp"><i>Phase 4</i><b>Interpretation</b><span>Hotspots, sensitivity, uncertainty and conclusions</span></a>
+      <p class="iso-cap">How a life cycle assessment is organised. Interpretation runs alongside the other three phases, and each phase can send you back to revise an earlier one.</p>
+    </nav>
+  </div>
+</div>
+
+<div class="strip" id="strip">
+  <div class="strip-in">
+    <div class="fu-mini" id="fuMini"></div>
+    <div class="kpis" id="kpis" role="group" aria-label="Impact category shown in the diagrams"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <!-- PHASE 1 -->
+  <section class="phase" id="goal">
+    <div class="ph-head"><span class="ph-n" aria-hidden="true">01</span><p class="eyebrow">Phase 1</p><h2>Goal and scope</h2></div>
+    <div class="gs">
+      <div class="hangtag">
+        <p class="eyebrow">Functional unit</p>
+        <p class="fu-text" id="fuText"></p>
+        <div class="tagrows" id="tagRows"></div>
+      </div>
+      <div class="card gs-side">
+        <div><p class="eyebrow">Goal</p><p>Show where one garment's impact comes from and which choices change it most. A screening study for the public, not for product claims.</p></div>
+        <div><p class="eyebrow">Impact categories</p><div class="catchips" id="cats"></div></div>
+        <div><p class="eyebrow">System boundary</p><p>Cradle to grave, in seven stages. Left out: capital goods, retail, your trip to the shop, detergent, mill process water and natural-fibre shedding.</p></div>
+      </div>
+    </div>
+    <div class="chain" id="chain"></div>
+    <p class="stg-detail" id="stgDetail"></p>
+    <details class="more">
+      <summary>Change the garment</summary>
+      <div class="ctl" id="ctl"></div>
+      <p class="hint" id="ctlHint"></p>
+    </details>
+    <details class="more">
+      <summary>Study settings</summary>
+      <dl class="dl">
+        <dt>Allocation</dt><dd>All burdens go to the garment. Recycling uses the cut-off approach, with no credit for recycled material.</dd>
+        <dt>Cut-off</dt><dd>Inputs below 1% of the climate result stay inside the stage factors.</dd>
+        <dt>Data</dt><dd>Factors from Hangnote's Methodology tables; some inventory amounts are derived from them and labelled.</dd>
+        <dt>Time and place</dt><dd>Current technology. Factory grid of the making country, household grid for washing.</dd>
+        <dt>Review</dt><dd>No critical review. Scenario comparisons are for learning only.</dd>
+      </dl>
+    </details>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="phase" id="inventory">
+    <div class="ph-head"><span class="ph-n" aria-hidden="true">02</span><p class="eyebrow">Phase 2</p><h2>Inventory analysis</h2></div>
+    <div class="tree-bar">
+      <p class="muted" style="max-width:70ch">The process tree of one life cycle. Each box is a process; lines carry its output to the next process, drawn thicker the more <b id="treeCatName"></b> it carries. Click any box to see its inputs and outputs.</p>
+      <div class="seg" role="group" aria-label="Line thickness by" id="treeCat"></div>
+    </div>
+    <div class="tree-grid">
+      <div class="treebox" id="treebox"><svg id="tree" role="group" aria-label="Process tree"></svg></div>
+      <aside class="card panel" id="panel" aria-live="polite"></aside>
+    </div>
+
+    <div class="sub"><h3>Life cycle inventory</h3><span class="muted" style="font-size:12.5px;flex:1 1 auto">Open a stage to see its flows</span><div class="fchips" id="lciFilter" role="group" aria-label="Show"></div></div>
+    <div class="tablebox"><table class="lci" id="lci"></table></div>
+    <p class="note">Amounts are per functional unit. Hangnote's factors already combine CO₂, methane and nitrous oxide into CO₂e, so the inventory reports greenhouse gases as CO₂e for each process. A full inventory would list each gas separately. <span class="badge b-model">Model</span> is a value straight from the Methodology tables, <span class="badge b-derived">Derived</span> is calculated from those values, and <span class="badge b-assume">Assumption</span> is an extra assumption used only to show the amount.</p>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="phase" id="impact">
+    <div class="ph-head"><span class="ph-n" aria-hidden="true">03</span><p class="eyebrow">Phase 3</p><h2>Impact assessment</h2></div>
+    <div class="cat-tabs" id="catTabs" role="group" aria-label="Impact category"></div>
+    <div class="lcia">
+      <div class="card big" id="big"></div>
+      <div class="card wf"><div class="tree-bar" style="margin-bottom:6px"><h3>From cradle to grave</h3><span class="muted" style="font-size:12.5px">Each stage adds to the running total</span></div><div id="wf"></div></div>
+    </div>
+    <div class="sub"><h3>Where each impact comes from</h3><span class="muted" style="font-size:12.5px">Share of each category by life-cycle stage</span></div>
+    <div class="card pad" style="overflow-x:auto"><table class="matrix" id="matrix"></table></div>
+    <div class="sub"><h3>Assessment steps</h3><span class="muted" style="font-size:12.5px">Which steps this estimate includes</span></div>
+    <div class="steps">
+      <div class="stepx"><span class="st y">✓</span><div><b>Category selection</b>Three categories, set in phase 1.</div></div>
+      <div class="stepx"><span class="st y">✓</span><div><b>Classification</b>Each inventory flow is assigned to its category.</div></div>
+      <div class="stepx"><span class="st p">◐</span><div><b>Characterisation</b>Climate uses CO₂e factors. Water and microfibres stay at inventory level.</div></div>
+      <div class="stepx"><span class="st n">–</span><div><b>Normalisation</b>Optional. Not done.</div></div>
+      <div class="stepx"><span class="st n">–</span><div><b>Grouping and weighting</b>Optional. Not done, so categories are never added together.</div></div>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="phase" id="interpretation">
+    <div class="ph-head"><span class="ph-n" aria-hidden="true">04</span><p class="eyebrow">Phase 4</p><h2>Interpretation</h2></div>
+    <div class="sub" style="margin-top:0"><h3>Significant issues</h3><span class="muted" style="font-size:12.5px">The biggest contributor in each category</span></div>
+    <div class="hots" id="hots"></div>
+
+    <div class="sub"><h3>Sensitivity check</h3><span class="muted" style="font-size:12.5px" id="torUnit"></span></div>
+    <div class="card tor"><div id="tor"></div><div class="tleg"><span><i style="background:color-mix(in srgb,var(--good) 70%,transparent)"></i>Lowers the result</span><span><i style="background:color-mix(in srgb,var(--bad) 70%,transparent)"></i>Raises the result</span><span>Black line: this study</span></div></div>
+
+    <div class="sub"><h3>Uncertainty</h3><span class="muted" style="font-size:12.5px">Likely range from the data-quality ranges in Methodology</span></div>
+    <div class="card unc" id="unc"></div>
+
+    <div class="sub"><h3>Evaluation</h3><span class="muted" style="font-size:12.5px">Checks on the result</span></div>
+    <div class="steps">
+      <div class="stepx"><span class="st p">◐</span><div><b>Completeness</b>All seven stages are covered. Mill water, detergent and capital goods are left out.</div></div>
+      <div class="stepx"><span class="st y">✓</span><div><b>Sensitivity</b>Eight key choices are varied above.</div></div>
+      <div class="stepx"><span class="st p">◐</span><div><b>Consistency</b>Same factor set throughout. Data age and region differ between sources.</div></div>
+    </div>
+
+    <div class="sub"><h3>Conclusions, limitations and recommendations</h3></div>
+    <div class="card concl" id="concl"></div>
+  </section>
+
+  <footer class="foot"><span>Hangnote · Full Breakdown (beta) · numbers from the Hangnote model</span><span>A screening estimate for learning, not a certified life cycle assessment</span></footer>
+</main>
+
+<script>
+var NAMES={"G": {"tshirt": "T-shirt", "jeans": "Jeans", "hoodie": "Hoodie", "leggings": "Leggings", "shirt": "Shirt", "sweater": "Sweater", "socks": "Socks", "underwear": "Underwear"}, "F": {"cotton": "Cotton", "rcotton": "Recycled cotton", "ocotton": "Organic cotton", "poly": "Polyester", "rpoly": "Recycled polyester", "viscose": "Viscose", "lyocell": "Lyocell (Tencel)", "linen": "Linen", "wool": "Wool", "nylon": "Nylon", "elastane": "Elastane", "acrylic": "Acrylic", "modal": "Modal", "hemp": "Hemp", "cashmere": "Cashmere", "silk": "Silk", "alpaca": "Alpaca", "mohair": "Mohair", "rnylon": "Recycled nylon", "rwool": "Recycled wool"}, "C": {"netherlands": "Netherlands", "australia": "Australia", "germany": "Germany", "france": "France", "uk": "United Kingdom", "usa": "United States", "japan": "Japan", "greece": "Greece", "albania": "Albania", "lithuania": "Lithuania", "malaysia": "Malaysia", "nicaragua": "Nicaragua", "elsalvador": "El Salvador", "haiti": "Haiti", "other": "Other country (average)", "bangladesh": "Bangladesh", "china": "China", "india": "India", "vietnam": "Vietnam", "turkey": "Turkey", "italy": "Italy", "portugal": "Portugal", "cambodia": "Cambodia", "indonesia": "Indonesia", "pakistan": "Pakistan", "srilanka": "Sri Lanka", "myanmar": "Myanmar", "romania": "Romania", "bulgaria": "Bulgaria", "spain": "Spain", "poland": "Poland", "morocco": "Morocco", "tunisia": "Tunisia", "egypt": "Egypt", "ethiopia": "Ethiopia", "kenya": "Kenya", "mauritius": "Mauritius", "mexico": "Mexico", "honduras": "Honduras", "peru": "Peru", "brazil": "Brazil", "thailand": "Thailand", "philippines": "Philippines", "jordan": "Jordan", "guatemala": "Guatemala", "dominicanrepublic": "Dominican Republic", "madagascar": "Madagascar"}, "M": {"sea": "Container ship", "air": "Air freight", "road": "Truck"}, "E": {"mix_usa": "Typical US mix", "mix_japan": "Typical Japan mix", "mix_australia": "Typical Australia mix", "mix": "Typical EU mix", "landfill": "Landfill", "incin": "Incineration", "recycle": "Recycling", "resale": "Resale or donation"}};
+var FIB={cotton:{c:2.0,w:10000,mp:0,p:4.7},rcotton:{c:0.4,w:500,mp:0,p:0},ocotton:{c:1.3,w:6700,mp:0,p:0},poly:{c:4.1,w:250,mp:1900},rpoly:{c:1.3,w:120,mp:2100},viscose:{c:5.9,w:300,mp:0},lyocell:{c:3.2,w:80,mp:0},linen:{c:0.8,w:400,mp:0},wool:{c:24.1,w:4500,mp:0},nylon:{c:15.4,w:700,mp:2400},elastane:{c:17,w:350,mp:1200},acrylic:{c:7.6,w:300,mp:2800},modal:{c:2.8,w:300,mp:0},hemp:{c:0.84,w:400,mp:0},cashmere:{c:170,w:4500,mp:0},silk:{c:80,w:1500,mp:0},alpaca:{c:53,w:4500,mp:0},mohair:{c:24.1,w:4500,mp:0},rnylon:{c:1.7,w:120,mp:2400},rwool:{c:0.6,w:100,mp:0}};
+var GRID_REF=458;
+var CTRY={bangladesh:{g:696},china:{g:525},india:{g:670},vietnam:{g:463},turkey:{g:476},italy:{g:285},portugal:{g:128},cambodia:{g:499},indonesia:{g:681},pakistan:{g:310},srilanka:{g:321},myanmar:{g:503},romania:{g:260},bulgaria:{g:275},spain:{g:154},poland:{g:591},morocco:{g:602},tunisia:{g:560},egypt:{g:563},ethiopia:{g:23},kenya:{g:95},mauritius:{g:642},mexico:{g:474},honduras:{g:322},peru:{g:238},brazil:{g:110},thailand:{g:546},philippines:{g:595},jordan:{g:530},guatemala:{g:301},dominicanrepublic:{g:537},madagascar:{g:432},germany:{g:330},france:{g:41},uk:{g:217},usa:{g:384},japan:{g:477},greece:{g:324},albania:{g:25},lithuania:{g:139},malaysia:{g:603},nicaragua:{g:301},elsalvador:{g:138},haiti:{g:535},other:{g:458}};
+var REG={china:"asia",bangladesh:"asia",india:"asia",vietnam:"asia",cambodia:"asia",indonesia:"asia",pakistan:"asia",srilanka:"asia",myanmar:"asia",turkey:"eu",italy:"eu",portugal:"eu",spain:"eu",romania:"eu",bulgaria:"eu",poland:"eu",morocco:"af",tunisia:"af",egypt:"af",ethiopia:"af",kenya:"af",mauritius:"af",mexico:"am",honduras:"am",peru:"am",brazil:"am",thailand:"asia",philippines:"asia",jordan:"eu",guatemala:"am",dominicanrepublic:"am",madagascar:"af",germany:"eu",france:"eu",uk:"eu",usa:"am",japan:"asia",greece:"eu",albania:"eu",lithuania:"eu",malaysia:"asia",nicaragua:"am",elsalvador:"am",haiti:"am"};
+var MODE={sea:{f:0.02},air:{f:0.62},road:{f:0.107}};
+var DEST={"germany":{"r":"eu","city":"Berlin","port":290,"ap":550,"rd":280,"land":1},"france":{"r":"eu","city":"Paris","port":200,"ap":25,"rd":0,"land":1},"uk":{"r":"eu","city":"London","port":130,"ap":25,"rd":0,"land":1},"italy":{"r":"eu","city":"Milan","port":145,"ap":45,"rd":0,"land":1},"spain":{"r":"eu","city":"Madrid","port":355,"ap":18,"rd":0,"land":1},"netherlands":{"r":"eu","city":"Amsterdam","port":75,"ap":15,"rd":0,"land":1},"usa":{"r":"na","city":"New York","port":25,"ap":25,"rd":0,"land":0},"japan":{"r":"ap","city":"Tokyo","port":30,"ap":65,"rd":0,"land":0},"australia":{"r":"ap","city":"Sydney","port":870,"ap":15,"rd":0,"land":0}};
+var WC={"germany":{"bangladesh":15000,"china":20000,"india":14000,"vietnam":18500,"turkey":7250,"italy":5365,"portugal":2200,"cambodia":17800,"indonesia":17650,"pakistan":12550,"srilanka":13800,"myanmar":15550,"romania":7100,"bulgaria":7000,"spain":4150,"poland":650,"morocco":3150,"tunisia":4800,"egypt":6900,"ethiopia":9500,"kenya":12600,"mauritius":14000,"mexico":13300,"honduras":10250,"peru":12750,"brazil":10850,"thailand":18150,"philippines":19250,"jordan":9550,"guatemala":10300,"dominicanrepublic":8550,"madagascar":13650,"germany":0,"france":950,"uk":1050,"usa":6900,"japan":22400,"greece":6350,"albania":6100,"lithuania":850,"malaysia":16350,"nicaragua":11150,"elsalvador":11500,"haiti":9050,"other":10300},"france":{"bangladesh":14800,"china":19500,"india":13800,"vietnam":18200,"turkey":6300,"italy":4200,"portugal":1400,"cambodia":16850,"indonesia":16700,"pakistan":11600,"srilanka":12850,"myanmar":14650,"romania":6150,"bulgaria":6050,"spain":3200,"poland":1650,"morocco":2200,"tunisia":3850,"egypt":5950,"ethiopia":8550,"kenya":11700,"mauritius":13050,"mexico":12400,"honduras":9350,"peru":11800,"brazil":9950,"thailand":17200,"philippines":18300,"jordan":8650,"guatemala":9400,"dominicanrepublic":7650,"madagascar":12750,"germany":950,"france":0,"uk":300,"usa":6000,"japan":21450,"greece":5400,"albania":5150,"lithuania":1800,"malaysia":15450,"nicaragua":10250,"elsalvador":10600,"haiti":8150,"other":9400},"uk":{"bangladesh":15200,"china":20500,"india":12050,"vietnam":19000,"turkey":6600,"italy":4450,"portugal":1800,"cambodia":17150,"indonesia":16950,"pakistan":11850,"srilanka":13100,"myanmar":14900,"romania":6400,"bulgaria":6300,"spain":3450,"poland":1750,"morocco":2450,"tunisia":4100,"egypt":6200,"ethiopia":8850,"kenya":11950,"mauritius":13350,"mexico":12650,"honduras":9600,"peru":12100,"brazil":10200,"thailand":17500,"philippines":18550,"jordan":8900,"guatemala":9650,"dominicanrepublic":7900,"madagascar":13000,"germany":1050,"france":300,"uk":0,"usa":6250,"japan":21750,"greece":5650,"albania":5400,"lithuania":1900,"malaysia":15700,"nicaragua":10500,"elsalvador":10850,"haiti":8400,"other":9650},"italy":{"bangladesh":12500,"china":17500,"india":8800,"vietnam":16000,"turkey":2750,"italy":0,"portugal":2100,"cambodia":13900,"indonesia":13750,"pakistan":8650,"srilanka":9900,"myanmar":11800,"romania":3100,"bulgaria":3000,"spain":700,"poland":5300,"morocco":1700,"tunisia":1100,"egypt":2900,"ethiopia":5650,"kenya":8750,"mauritius":10150,"mexico":13250,"honduras":10400,"peru":12700,"brazil":10000,"thailand":14250,"philippines":15350,"jordan":5700,"guatemala":10450,"dominicanrepublic":8450,"madagascar":9800,"germany":4650,"france":3700,"uk":3950,"usa":7750,"japan":18500,"greece":2350,"albania":2100,"lithuania":5450,"malaysia":12450,"nicaragua":11050,"elsalvador":11400,"haiti":9000,"other":8800},"spain":{"bangladesh":13500,"china":18500,"india":9050,"vietnam":13700,"turkey":3000,"italy":1100,"portugal":1500,"cambodia":14200,"indonesia":14000,"pakistan":8950,"srilanka":10200,"myanmar":12050,"romania":3350,"bulgaria":3250,"spain":0,"poland":4300,"morocco":650,"tunisia":1100,"egypt":3200,"ethiopia":5900,"kenya":9000,"mauritius":10400,"mexico":12250,"honduras":9400,"peru":11700,"brazil":9000,"thailand":14550,"philippines":15600,"jordan":5950,"guatemala":9450,"dominicanrepublic":7450,"madagascar":10050,"germany":3650,"france":2750,"uk":3000,"usa":6750,"japan":18800,"greece":2600,"albania":2400,"lithuania":4500,"malaysia":12750,"nicaragua":10050,"elsalvador":10400,"haiti":8000,"other":9000},"netherlands":{"bangladesh":14900,"china":19800,"india":14100,"vietnam":18600,"turkey":6700,"italy":4600,"portugal":2000,"cambodia":17250,"indonesia":17100,"pakistan":12000,"srilanka":13250,"myanmar":15050,"romania":6550,"bulgaria":6450,"spain":3550,"poland":1850,"morocco":2600,"tunisia":4250,"egypt":6350,"ethiopia":8950,"kenya":12050,"mauritius":13450,"mexico":12800,"honduras":9700,"peru":12200,"brazil":10300,"thailand":17600,"philippines":18700,"jordan":9000,"guatemala":9750,"dominicanrepublic":8000,"madagascar":13100,"germany":1200,"france":450,"uk":550,"usa":6350,"japan":21850,"greece":5800,"albania":5550,"lithuania":2050,"malaysia":15800,"nicaragua":10650,"elsalvador":10950,"haiti":8500,"other":9700},"usa":{"bangladesh":17500,"china":19000,"india":15500,"vietnam":21000,"turkey":8500,"italy":6800,"portugal":5500,"cambodia":20950,"indonesia":20800,"pakistan":15650,"srilanka":16900,"myanmar":18600,"romania":10350,"bulgaria":10250,"spain":7400,"poland":7550,"morocco":6400,"tunisia":8050,"egypt":10150,"ethiopia":12650,"kenya":15750,"mauritius":17100,"mexico":6950,"honduras":3350,"peru":6350,"brazil":9350,"thailand":21300,"philippines":21650,"jordan":12700,"guatemala":3400,"dominicanrepublic":2650,"madagascar":16800,"germany":6900,"france":6000,"uk":6250,"usa":0,"japan":18400,"greece":9600,"albania":9350,"lithuania":7750,"malaysia":19500,"nicaragua":4850,"elsalvador":5200,"haiti":2650,"other":9600},"japan":{"bangladesh":8700,"china":2200,"india":8800,"vietnam":4200,"turkey":15000,"italy":17500,"portugal":18500,"cambodia":5000,"indonesia":6650,"pakistan":11250,"srilanka":8700,"myanmar":7850,"romania":18100,"bulgaria":18000,"spain":19200,"poland":22750,"morocco":19950,"tunisia":18300,"egypt":16200,"ethiopia":12900,"kenya":13450,"mauritius":12600,"mexico":11500,"honduras":15500,"peru":16250,"brazil":25350,"thailand":5750,"philippines":3300,"jordan":15100,"guatemala":15550,"dominicanrepublic":15900,"madagascar":13100,"germany":22100,"france":21150,"uk":21400,"usa":18150,"japan":0,"greece":17250,"albania":18300,"lithuania":22900,"malaysia":6050,"nicaragua":13350,"elsalvador":13050,"haiti":15950,"other":15500},"australia":{"bangladesh":9500,"china":8500,"india":9800,"vietnam":6800,"turkey":17500,"italy":18500,"portugal":19800,"cambodia":8400,"indonesia":6550,"pakistan":11650,"srilanka":9100,"myanmar":9400,"romania":18550,"bulgaria":18450,"spain":19650,"poland":23150,"morocco":20350,"tunisia":18700,"egypt":16650,"ethiopia":13350,"kenya":11700,"mauritius":8900,"mexico":13700,"honduras":16500,"peru":13550,"brazil":18150,"thailand":8750,"philippines":8050,"jordan":15550,"guatemala":16550,"dominicanrepublic":16850,"madagascar":9850,"germany":22500,"france":21600,"uk":21850,"usa":19100,"japan":11300,"greece":17650,"albania":18700,"lithuania":23350,"malaysia":7650,"nicaragua":14850,"elsalvador":14650,"haiti":16900,"other":16000}};
+var KC={"germany":{"bangladesh":9000,"china":12000,"india":8500,"vietnam":11500,"turkey":2800,"italy":950,"portugal":2100,"cambodia":12100,"indonesia":14300,"pakistan":7350,"srilanka":10500,"myanmar":10750,"romania":2050,"bulgaria":2100,"spain":1750,"poland":700,"morocco":3200,"tunisia":2600,"egypt":4150,"ethiopia":7700,"kenya":9750,"mauritius":13100,"mexico":12750,"honduras":12750,"peru":15250,"brazil":14250,"thailand":12450,"philippines":14050,"jordan":4350,"guatemala":12850,"dominicanrepublic":10750,"madagascar":12350,"germany":0,"france":1000,"uk":800,"usa":7950,"japan":11700,"greece":2650,"albania":2000,"lithuania":900,"malaysia":13750,"nicaragua":13100,"elsalvador":13200,"haiti":11000,"other":9750},"france":{"bangladesh":9100,"china":12100,"india":8600,"vietnam":11600,"turkey":2900,"italy":900,"portugal":1500,"cambodia":13050,"indonesia":15250,"pakistan":8200,"srilanka":11300,"myanmar":11750,"romania":2700,"bulgaria":2700,"spain":1100,"poland":1650,"morocco":2200,"tunisia":2300,"egypt":4500,"ethiopia":8050,"kenya":9900,"mauritius":13400,"mexico":12200,"honduras":11950,"peru":14200,"brazil":13100,"thailand":13550,"philippines":15200,"jordan":4800,"guatemala":12050,"dominicanrepublic":9800,"madagascar":12550,"germany":1000,"france":0,"uk":350,"usa":7350,"japan":12700,"greece":2950,"albania":2300,"lithuania":1900,"malaysia":14800,"nicaragua":12250,"elsalvador":12400,"haiti":10050,"other":9800},"uk":{"bangladesh":9200,"china":12200,"india":8800,"vietnam":11800,"turkey":3200,"italy":1400,"portugal":1900,"cambodia":12850,"indonesia":15100,"pakistan":8100,"srilanka":11200,"myanmar":11550,"romania":2650,"bulgaria":2650,"spain":1400,"poland":1450,"morocco":2600,"tunisia":2550,"egypt":4600,"ethiopia":8200,"kenya":10100,"mauritius":13550,"mexico":12200,"honduras":12000,"peru":14400,"brazil":13500,"thailand":13300,"philippines":14900,"jordan":4850,"guatemala":12100,"dominicanrepublic":9950,"madagascar":12700,"germany":750,"france":350,"uk":0,"usa":7350,"japan":12350,"greece":3050,"albania":2350,"lithuania":1650,"malaysia":14600,"nicaragua":12350,"elsalvador":12450,"haiti":10200,"other":9950},"italy":{"bangladesh":8500,"china":11800,"india":7800,"vietnam":11000,"turkey":2100,"italy":400,"portugal":2000,"cambodia":12400,"indonesia":14450,"pakistan":7300,"srilanka":10350,"myanmar":11050,"romania":1900,"bulgaria":1850,"spain":800,"poland":1600,"morocco":2150,"tunisia":1200,"egypt":3300,"ethiopia":6850,"kenya":8700,"mauritius":12200,"mexico":13350,"honduras":13050,"peru":14900,"brazil":13250,"thailand":12800,"philippines":14750,"jordan":3650,"guatemala":13100,"dominicanrepublic":10750,"madagascar":11300,"germany":1200,"france":1050,"uk":1300,"usa":8450,"japan":12800,"greece":1850,"albania":1200,"lithuania":1850,"malaysia":13950,"nicaragua":13300,"elsalvador":13500,"haiti":11050,"other":8600},"spain":{"bangladesh":9600,"china":12600,"india":9100,"vietnam":12100,"turkey":3400,"italy":1400,"portugal":600,"cambodia":13550,"indonesia":15500,"pakistan":8300,"srilanka":11300,"myanmar":12200,"romania":2950,"bulgaria":2850,"spain":350,"poland":2650,"morocco":850,"tunisia":1350,"egypt":4050,"ethiopia":7400,"kenya":8850,"mauritius":12500,"mexico":12750,"honduras":12200,"peru":13650,"brazil":11900,"thailand":14050,"philippines":16050,"jordan":4400,"guatemala":12250,"dominicanrepublic":9750,"madagascar":11500,"germany":2100,"france":1350,"uk":1800,"usa":7900,"japan":13950,"greece":2700,"albania":2200,"lithuania":2900,"malaysia":15100,"nicaragua":12400,"elsalvador":12600,"haiti":10050,"other":9350},"netherlands":{"bangladesh":9050,"china":12050,"india":8550,"vietnam":11550,"turkey":2950,"italy":1100,"portugal":2050,"cambodia":12650,"indonesia":14850,"pakistan":7850,"srilanka":10950,"myanmar":11300,"romania":2400,"bulgaria":2450,"spain":1450,"poland":1200,"morocco":2700,"tunisia":2450,"egypt":4350,"ethiopia":7950,"kenya":9900,"mauritius":13350,"mexico":12400,"honduras":12250,"peru":14650,"brazil":13650,"thailand":13050,"philippines":14650,"jordan":4600,"guatemala":12350,"dominicanrepublic":10200,"madagascar":12500,"germany":500,"france":450,"uk":250,"usa":7600,"japan":12200,"greece":2850,"albania":2150,"lithuania":1400,"malaysia":14350,"nicaragua":12600,"elsalvador":12750,"haiti":10450,"other":9500},"usa":{"bangladesh":18000,"china":16000,"india":17000,"vietnam":18500,"turkey":9500,"italy":7500,"portugal":6200,"cambodia":18600,"indonesia":21000,"pakistan":15200,"srilanka":18300,"myanmar":17650,"romania":9400,"bulgaria":9450,"spain":7400,"poland":7950,"morocco":8200,"tunisia":9850,"egypt":12400,"ethiopia":15900,"kenya":17200,"mauritius":20900,"mexico":4850,"honduras":4300,"peru":8200,"brazil":10850,"thailand":19600,"philippines":19150,"jordan":12150,"guatemala":4350,"dominicanrepublic":3500,"madagascar":19750,"germany":7350,"france":6800,"uk":7350,"usa":0,"japan":14150,"greece":10300,"albania":9650,"lithuania":8000,"malaysia":21200,"nicaragua":4750,"elsalvador":4750,"haiti":3450,"other":9850},"japan":{"bangladesh":7200,"china":3000,"india":8500,"vietnam":5200,"turkey":11500,"italy":12500,"portugal":13200,"cambodia":5950,"indonesia":7500,"pakistan":9000,"srilanka":8900,"myanmar":6200,"romania":10500,"bulgaria":10650,"spain":12550,"poland":10250,"morocco":15800,"tunisia":14600,"egypt":13450,"ethiopia":13800,"kenya":15650,"mauritius":14850,"mexico":14250,"honduras":17400,"peru":21700,"brazil":26050,"thailand":6450,"philippines":4150,"jordan":12150,"guatemala":17350,"dominicanrepublic":18600,"madagascar":15650,"germany":10800,"france":11700,"uk":12350,"usa":14150,"japan":0,"greece":12400,"albania":12400,"lithuania":10000,"malaysia":7450,"nicaragua":17850,"elsalvador":17450,"haiti":18400,"other":12400},"australia":{"bangladesh":10500,"china":9500,"india":11500,"vietnam":8200,"turkey":18000,"italy":19000,"portugal":20500,"cambodia":8950,"indonesia":6750,"pakistan":13900,"srilanka":10850,"myanmar":10300,"romania":17700,"bulgaria":17750,"spain":20200,"poland":18750,"morocco":24350,"tunisia":22450,"egypt":19800,"ethiopia":16550,"kenya":15500,"mauritius":11800,"mexico":17000,"honduras":20050,"peru":18150,"brazil":18250,"thailand":10200,"philippines":8900,"jordan":17700,"guatemala":19950,"dominicanrepublic":22450,"madagascar":12950,"germany":19400,"france":20350,"uk":21850,"usa":21650,"japan":10600,"greece":19450,"albania":20000,"lithuania":18550,"malaysia":8900,"nicaragua":19800,"elsalvador":19600,"haiti":22150,"other":18100}};
+var AIRO={"germany":8030,"france":7760,"uk":7720,"italy":8110,"spain":7340,"netherlands":7670,"usa":8280,"japan":10360,"australia":14760};
+var APO={"china":[31.1434,121.8052],"bangladesh":[23.8433,90.3978],"turkey":[41.2753,28.7519],"italy":[45.6306,8.7281],"vietnam":[10.8188,106.652],"india":[19.0887,72.8679],"portugal":[41.2481,-8.6814],"cambodia":[11.5466,104.8441],"indonesia":[-6.1256,106.6559],"pakistan":[24.9065,67.1608],"srilanka":[7.1808,79.8841],"myanmar":[16.9073,96.1332],"romania":[44.5711,26.085],"bulgaria":[42.6967,23.4114],"spain":[41.2971,2.0785],"poland":[52.1657,20.9671],"morocco":[33.3675,-7.5899],"tunisia":[36.851,10.2272],"egypt":[30.1219,31.4056],"ethiopia":[8.9779,38.7993],"kenya":[-1.3192,36.9278],"mauritius":[-20.4302,57.6836],"mexico":[19.4363,-99.0721],"honduras":[15.4526,-87.9236],"peru":[-12.0219,-77.1143],"brazil":[-23.4356,-46.4731],"thailand":[13.69,100.7501],"philippines":[14.5086,121.0198],"jordan":[31.7226,35.9932],"guatemala":[14.5833,-90.5275],"dominicanrepublic":[18.4297,-69.6689],"madagascar":[-18.7969,47.4788],"germany":[50.0379,8.5622],"france":[49.0097,2.5479],"uk":[51.47,-0.4543],"usa":[40.6413,-73.7781],"japan":[35.772,140.3929],"greece":[37.9364,23.9445],"albania":[41.4147,19.7206],"lithuania":[54.6341,25.2858],"malaysia":[2.7456,101.7099],"nicaragua":[12.1415,-86.1682],"elsalvador":[13.4409,-89.0557],"haiti":[18.58,-72.2926],"other":[0,0]},APD={"germany":[50.0379,8.5622],"france":[49.0097,2.5479],"uk":[51.47,-0.4543],"italy":[45.6306,8.7281],"spain":[40.4983,-3.5676],"netherlands":[52.3105,4.7683],"usa":[40.6413,-73.7781],"japan":[35.772,140.3929],"australia":[-33.9399,151.1753]},ROADO=["turkey","italy","portugal","romania","bulgaria","spain","poland","germany","france","greece","albania","lithuania"];
+var DREG={eu:["germany","france","uk","italy","spain","netherlands"],na:["usa"],ap:["japan","australia"]},DDEF={eu:"germany",na:"usa",ap:"japan"};
+function gcd(a,b){var R=6371,r=function(x){return x*Math.PI/180;},dp=r(b[0]-a[0]),dl=r(b[1]-a[1]),h=Math.sin(dp/2)*Math.sin(dp/2)+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(dl/2)*Math.sin(dl/2);return 2*R*Math.asin(Math.sqrt(h));}
+function roadOk(o,d){return (o==="mexico"&&d==="usa")||(!!DEST[d].land&&ROADO.indexOf(o)>-1);}
+function modeOf(m,o,d){return m==="road"&&!roadOk(o,d)?"sea":m;}
+function route(o,d,m){var D=DEST[d];
+  if(m==="air"){var u=o==="other"?AIRO[d]:Math.round(gcd(APO[o],APD[d])*1.08/10)*10;return {km:u+D.ap,e:u*MODE.air.f+D.ap*MODE.road.f};}
+  if(m==="road"){var V=KC[d][o]+D.rd;return {km:V,e:V*MODE.road.f};}
+  var P=WC[d][o],b=P===0?0:Math.max(100,P);return {km:b+D.port,e:b*MODE.sea.f+D.port*MODE.road.f};}
+
+var GAR={tshirt:{w:0.22,blend:[["cotton",100]],o:"bangladesh",m:"sea"},jeans:{w:0.65,blend:[["cotton",98],["elastane",2]],o:"bangladesh",m:"sea"},hoodie:{w:0.55,blend:[["cotton",80],["poly",20]],o:"china",m:"sea"},leggings:{w:0.24,blend:[["poly",82],["elastane",18]],o:"china",m:"sea"},shirt:{w:0.19,blend:[["linen",100]],o:"italy",m:"road"},sweater:{w:0.48,blend:[["rcotton",65],["rpoly",35]],o:"china",m:"sea"},socks:{w:0.05,blend:[["cotton",75],["nylon",25]],o:"china",m:"sea",wpw:1},underwear:{w:0.08,blend:[["cotton",95],["elastane",5]],o:"bangladesh",m:"sea",wpw:1}};
+var PROC=21,SH={yarn:41/85,wet:37/85,asm:7/85},ES={yarn:.85,wet:.25,asm:.9};
+var LOAD=3.4,WATERW=50,EN={30:.4,40:.6,60:.9},DRY=2,GRIDH=0.21,CAR=0.163;
+var EOLS=["mix","landfill","incin","recycle","resale"];
+/* end-of-life shares [landfill, burned, recycled/reused]: EU = earlier model value; US = EPA 2018 textiles (11.3/3.2/2.5 Mt); Japan = SMRJ 2009 household survey (about 70% discarded as waste, mostly burned; about 30% reused or collected); Australia = 2018-19 (93% landfill, 7% recycled) */
+var EM={eu:[.33,.40,.27],usa:[.66,.19,.15],japan:[0,.70,.30],australia:[.93,0,.07]};
+function eolKey(s){var d=DEST[s.d];return d&&d.r==="eu"?"eu":s.d;}
+
+function synShare(b){var s=0;b.forEach(function(x){if(FIB[x[0]].mp>0)s+=x[1];});return s/100;}
+function wtG(s){return s.wt||Math.round(GAR[s.g].w*1000);}
+function calc(s){
+  var kg=wtG(s)/1000,c=CTRY[s.o],r=c.g/GRID_REF,raw=0,water=0,mpPerG=0,pg=0,pc=0;
+  s.blend.forEach(function(x){var f=FIB[x[0]],p=x[1]/100;raw+=kg*p*f.c;water+=kg*p*f.w;mpPerG+=p*f.mp;if(f.p!=null){pg+=kg*p*f.p;pc+=p;}});
+  var base=kg*PROC,yarn=base*SH.yarn*(1+ES.yarn*(r-1)),wet=base*SH.wet*(1+ES.wet*(r-1)),asm=base*SH.asm*(1+ES.asm*(r-1));
+  var mode=modeOf(s.m,s.o,s.d),rt=route(s.o,s.d,mode),km=rt.km;
+  var fr=kg/1000*rt.e;
+  var washes=Math.min(s.washes,s.wears),share=kg/LOAD,use=washes*share*((EN[s.temp]+(s.dry?DRY:0))*GRIDH),useW=washes*share*WATERW;
+  var ss=synShare(s.blend),ef={landfill:.497,incin:.0064+ss*2.3,recycle:.0064,resale:.0064};var em=EM[eolKey(s)];ef.mix=em[0]*ef.landfill+em[1]*ef.incin+em[2]*ef.recycle;
+  var eol=kg*ef[s.eol],stages={raw:raw,yarn:yarn,wet:wet,asm:asm,fr:fr,use:use,eol:eol};
+  return {pestG:pg,pestCov:pc,stages:stages,total:raw+yarn+wet+asm+fr+use+eol,mill:yarn+wet+asm,water:water+useW,useW:useW,mpWash:Math.round(kg*1000*mpPerG),washes:washes,km:km,mode:mode};
+}
+</script>
+<script>
+"use strict";
+// ---------- reference data ----------
+var ISO2={bangladesh:"BD",china:"CN",india:"IN",vietnam:"VN",turkey:"TR",italy:"IT",portugal:"PT",cambodia:"KH",indonesia:"ID",pakistan:"PK",srilanka:"LK",myanmar:"MM",romania:"RO",bulgaria:"BG",spain:"ES",poland:"PL",morocco:"MA",tunisia:"TN",egypt:"EG",ethiopia:"ET",kenya:"KE",mauritius:"MU",mexico:"MX",honduras:"HN",peru:"PE",brazil:"BR",thailand:"TH",philippines:"PH",jordan:"JO",guatemala:"GT",dominicanrepublic:"DO",madagascar:"MG",germany:"DE",france:"FR",uk:"GB",usa:"US",japan:"JP",greece:"GR",albania:"AL",lithuania:"LT",malaysia:"MY",nicaragua:"NI",elsalvador:"SV",haiti:"HT",other:"GLO",netherlands:"NL",australia:"AU"};
+var SIZES=[["","Not set",1],["XS",.82],["S",.9],["M",1],["L",1.1],["XL",1.22],["2XL",1.36],["3XL",1.5]];
+var HEAT_EF=0.0702; // kg CO2e per MJ, natural gas heat incl. upstream: display assumption only
+var UNC={raw:.25,yarn:.15,wet:.15,asm:.15,fr:.25,use:.2,eol:.3}, UNC_MP=.5;
+var STG=[
+ {k:"raw",n:"Raw materials",d:"Growing or making the fibre",inc:"Farming or fibre production up to fibre at the gate: irrigation, fertiliser, pesticides, and for synthetics the oil-based polymer."},
+ {k:"yarn",n:"Yarn & fabric",d:"Spinning, knitting, weaving",inc:"Spinning fibre into yarn and knitting or weaving it into fabric. Mostly electricity, so it follows the factory country's grid."},
+ {k:"wet",n:"Wet processing",d:"Dyeing and finishing",inc:"Pre-treatment, dyeing and finishing of the fabric. Mostly heat from boilers, plus chemicals and electricity."},
+ {k:"asm",n:"Assembly",d:"Cutting, sewing, packing",inc:"Cutting, sewing, trims and packaging at the garment factory."},
+ {k:"fr",n:"Distribution",d:"Factory to shop",inc:"Main freight leg by sea, air or road, plus the truck leg to a shop in the destination country."},
+ {k:"use",n:"Use",d:"Washing and drying",inc:"Electricity for heating wash water and, if used, the tumble dryer; tap water; synthetic microfibres shed in the wash."},
+ {k:"eol",n:"End of life",d:"Landfill, burning, reuse",inc:"What happens after the last wear: landfill, incineration, recycling or resale, using the typical mix for the destination country."}];
+var SK={};STG.forEach(function(x,i){SK[x.k]=x;x.i=i;});
+var ICON={
+ co2:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.2 9.1 4.5 4.5 0 0 0 7 18z"/></svg>',
+ water:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/></svg>',
+ mp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 8c3-3 5 3 8 0s5 3 8 0M3 14c3-3 5 3 8 0s5 3 8 0"/><circle cx="20" cy="18" r="1.3"/><circle cx="5" cy="19" r="1"/></svg>'};
+var CATS={
+ co2:{n:"Climate change",ind:"Global warming potential, 100 years (GWP100)",u:"kg CO₂e",us:"kg CO₂e",k:"--k-co2",basis:"CO₂e factors per kg of fibre, per kg of garment processed, per tonne-km and per kWh.",lvl:"Characterised"},
+ water:{n:"Water use",ind:"Freshwater consumed",u:"litres",us:"L",k:"--k-water",basis:"Water footprint of the fibre plus tap water for washing. Not weighted by local water scarcity.",lvl:"Inventory level"},
+ mp:{n:"Microplastic release",ind:"Synthetic microfibres shed in washing",u:"microfibres",us:"fibres",k:"--k-mp",basis:"Fibres shed per gram per wash for each synthetic fibre, times weight and number of washes.",lvl:"Inventory level"}};
+var CK=["co2","water","mp"];
+
+// ---------- state ----------
+var S={g:"hoodie",size:"2XL",wt:748,blend:[["ocotton",100]],o:"china",d:"germany",m:"sea",years:1,wpy:52,wash:26,temp:40,dry:false,eol:"mix",cat:"co2",sel:"root",lciF:"all",stg:"yarn",lciOpen:{}};
+
+// ---------- helpers ----------
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function cn(k){return NAMES.C[k]||k;}
+function fn(k){return NAMES.F[k]||k;}
+function gn(k){return NAMES.G[k]||k;}
+function lc(s){return s.charAt(0).toLowerCase()+s.slice(1);}
+function comma(n){return n.toLocaleString("en-US");}
+function fa(v){var a=Math.abs(v);if(a===0)return "0";if(Number.isInteger(v))return comma(v);if(a>=1000)return comma(Math.round(v));if(a>=100)return v.toFixed(0);if(a>=10)return v.toFixed(1);if(a>=1)return v.toFixed(2);if(a>=0.01)return v.toFixed(3);return v.toExponential(1);}
+function fmt(cat,v){if(cat==="co2")return v<0.005&&v>0?"<0.01":v>=100?v.toFixed(0):v>=10?v.toFixed(1):v.toFixed(2);if(cat==="water")return comma(Math.round(v));if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+" M";if(v>=1e3)return Math.round(v/1e3)+"k";return comma(Math.round(v));}
+function pct(a,b){if(!b)return "0%";var p=a/b*100;return p>0&&p<1?"<1%":Math.round(p)+"%";}
+function cv(name){return "var("+name+")";}
+function blendName(b){if(b.length===1)return lc(fn(b[0][0]));return b.map(function(x){return x[1]+"% "+lc(fn(x[0]));}).join(" / ");}
+function eolName(){var k=eolKey(sim());if(S.eol!=="mix")return NAMES.E[S.eol];return NAMES.E[k==="eu"?"mix":"mix_"+k]||NAMES.E.mix;}
+function modeName(m){return NAMES.M[m];}
+function sim(){return {g:S.g,blend:S.blend,o:S.o,d:S.d,m:S.m,wears:S.wpy*S.years,washes:Math.min(S.wash,S.wpy)*S.years,temp:S.temp,dry:S.dry,eol:S.eol,wt:S.wt};}
+
+// ---------- model ----------
+function run(s){
+  var R=calc(s),st={},tot={co2:0,water:0,mp:0};
+  STG.forEach(function(x){st[x.k]={co2:R.stages[x.k],water:0,mp:0};});
+  st.raw.water=R.water-R.useW;st.use.water=R.useW;st.use.mp=R.mpWash*R.washes;
+  STG.forEach(function(x){CK.forEach(function(c){tot[c]+=st[x.k][c];});});
+  return {R:R,st:st,tot:tot};
+}
+
+// ---------- inventory / process tree ----------
+function legsOf(o,d,m,kg){var D=DEST[d],L=[];
+  if(m==="air"){var u=o==="other"?AIRO[d]:Math.round(gcd(APO[o],APD[d])*1.08/10)*10;L.push(["air",u]);if(D.ap)L.push(["road",D.ap]);}
+  else if(m==="road"){L.push(["road",KC[d][o]+D.rd]);}
+  else{var P=WC[d][o],b=P===0?0:Math.max(100,P);if(b)L.push(["sea",b]);if(D.port)L.push(["road",D.port]);}
+  return L.map(function(l){var tkm=kg/1000*l[1];return {mode:l[0],km:l[1],tkm:tkm,co2:tkm*MODE[l[0]].f};});}
+var MODEDS={sea:"transport, freight, sea, container ship",air:"transport, freight, aircraft, long haul",road:"transport, freight, lorry >32 t"};
+var MODELOC={sea:"GLO",air:"GLO",road:"RER"};
+
+function build(M){
+  var s=sim(),R=M.R,kg=S.wt/1000,oc=ISO2[S.o],dc=ISO2[S.d],g=CTRY[S.o].g,r=g/GRID_REF,N={};
+  function add(id,o){o.id=id;o.ch=o.ch||[];o.dir=o.dir||{co2:0,water:0,mp:0};N[id]=o;return o;}
+  var gname=gn(S.g);
+  add("root",{name:"1 "+lc(gname)+", life cycle",loc:"",kind:"root",amt:1,unit:"piece",ch:["asm","fr","use","eol"],
+    basis:["model","The reference flow: one garment of "+S.wt+" g, used for "+S.years+" year"+(S.years>1?"s":"")+"."]});
+  var mill={yarn:{n:"yarn & fabric production (spinning, knitting)",out:"fabric"},wet:{n:"textile wet processing (dyeing, finishing)",out:"finished fabric"},asm:{n:"garment manufacturing and packaging",out:"garment"}};
+  ["asm","wet","yarn"].forEach(function(k){
+    var base=kg*PROC*SH[k],co2=base*(1+ES[k]*(r-1)),eCO2=base*ES[k]*r,kwh=base*ES[k]*1000/GRID_REF,hCO2=co2-eCO2;
+    var ch=k==="asm"?["wet"]:k==="wet"?["yarn"]:[];
+    if(k==="yarn")S.blend.forEach(function(b,i){ch.push("fib"+i);});
+    ch.push("e_"+k,"h_"+k);
+    add(k,{name:mill[k].n,loc:oc,stage:k,kind:"fg",amt:kg,unit:"kg "+mill[k].out,ch:ch,
+      basis:["model","Stage factor "+fa(PROC*SH[k])+" kg CO₂e per kg of garment (Methodology table 3), adjusted for the "+cn(S.o)+" grid ("+g+" g CO₂e/kWh)."]});
+    add("e_"+k,{name:"market for electricity, medium voltage",loc:oc,stage:k,kind:"bg",amt:kwh,unit:"kWh",dir:{co2:eCO2,water:0,mp:0},
+      basis:["derived","Electricity share "+Math.round(ES[k]*100)+"% of the stage factor, divided by the reference grid ("+GRID_REF+" g/kWh). Emissions use the "+cn(S.o)+" grid: "+g+" g CO₂e/kWh."]});
+    add("h_"+k,{name:"heat and other process inputs",loc:oc,stage:k,kind:"bg",amt:hCO2/HEAT_EF,unit:"MJ",dir:{co2:hCO2,water:0,mp:0},approx:true,
+      basis:["assume","The rest of the stage factor (heat, chemicals, auxiliaries). Shown as natural-gas heat at "+HEAT_EF+" kg CO₂e/MJ only to give an amount; Hangnote does not split this further."]});
+  });
+  S.blend.forEach(function(b,i){var f=FIB[b[0]],kf=kg*b[1]/100;
+    add("fib"+i,{name:"fibre production, "+lc(fn(b[0])),loc:"GLO",stage:"raw",kind:"fg",amt:kf,unit:"kg fibre",dir:{co2:kf*f.c,water:kf*f.w,mp:0},
+      pest:f.p!=null?kf*f.p:null,
+      basis:["model",fn(b[0])+": "+f.c+" kg CO₂e and "+comma(f.w)+" L water per kg"+(f.mp?", sheds "+comma(f.mp)+" microfibres per g per wash":"")+(f.p!=null?", "+f.p+" g pesticide active ingredient per kg":"")+" (Methodology table 2)."]});
+  });
+  var legs=legsOf(S.o,S.d,R.mode,kg),fch=[];
+  legs.forEach(function(l,i){fch.push("leg"+i);
+    add("leg"+i,{name:MODEDS[l.mode],loc:MODELOC[l.mode],stage:"fr",kind:"bg",amt:l.tkm,unit:"tkm",dir:{co2:l.co2,water:0,mp:0},km:l.km,
+      basis:["derived",comma(l.km)+" km × "+fa(kg/1000)+" t = "+fa(l.tkm)+" tkm, at "+MODE[l.mode].f+" kg CO₂e per tkm (Methodology table 4)."]});});
+  add("fr",{name:"distribution, "+cn(S.o)+" to "+cn(S.d),loc:oc+"→"+dc,stage:"fr",kind:"fg",amt:R.km,unit:"km",ch:fch,
+    basis:["model",modeName(R.mode)+" route of "+comma(R.km)+" km, including the truck leg to the shop."]});
+  var washes=R.washes,share=kg/LOAD,kWash=washes*share*EN[S.temp],kDry=S.dry?washes*share*DRY:0,wL=washes*share*WATERW,uch=["e_wash"];
+  add("e_wash",{name:"market for electricity, low voltage (washing)",loc:dc,stage:"use",kind:"bg",amt:kWash,unit:"kWh",dir:{co2:kWash*GRIDH,water:0,mp:0},
+    basis:["model",EN[S.temp]+" kWh per "+LOAD+" kg load at "+S.temp+" °C; this garment is "+fa(share*100)+"% of a load. Household grid "+GRIDH+" kg CO₂e/kWh."]});
+  if(S.dry){uch.push("e_dry");add("e_dry",{name:"market for electricity, low voltage (tumble dryer)",loc:dc,stage:"use",kind:"bg",amt:kDry,unit:"kWh",dir:{co2:kDry*GRIDH,water:0,mp:0},
+    basis:["model",DRY+" kWh per load for the dryer, same share and grid as washing."]});}
+  uch.push("w_tap");
+  add("w_tap",{name:"market for tap water",loc:dc,stage:"use",kind:"bg",amt:wL,unit:"L",dir:{co2:0,water:wL,mp:0},
+    basis:["model",WATERW+" L per load × "+fa(share*100)+"% share × "+washes+" washes."]});
+  add("use",{name:"use phase, "+washes+" washes at "+S.temp+" °C",loc:dc,stage:"use",kind:"fg",amt:washes,unit:"washes",ch:uch,dir:{co2:0,water:0,mp:R.mpWash*washes},
+    basis:["model","Microfibres: "+comma(R.mpWash)+" per wash × "+washes+" washes, released to wastewater."]});
+  var ss=synShare(S.blend),ef={landfill:.497,incin:.0064+ss*2.3,recycle:.0064,resale:.0064},routes;
+  if(S.eol==="mix"){var em=EM[eolKey(s)];routes=[["landfill",em[0]],["incin",em[1]],["recycle",em[2]]];}else routes=[[S.eol,1]];
+  var EOLDS={landfill:"treatment of textile waste, sanitary landfill",incin:"treatment of textile waste, municipal incineration",recycle:"textile recycling (cut-off, no credit)",resale:"reuse via resale or donation (cut-off)"},ech=[];
+  routes.forEach(function(rt){if(rt[1]<=0)return;var id="eol_"+rt[0],kk=kg*rt[1];ech.push(id);
+    add(id,{name:EOLDS[rt[0]],loc:dc,stage:"eol",kind:"bg",amt:kk,unit:"kg",dir:{co2:kk*ef[rt[0]],water:0,mp:0},
+      basis:["model",Math.round(rt[1]*100)+"% of the garment, "+fa(ef[rt[0]])+" kg CO₂e per kg"+(rt[0]==="incin"&&ss?" (includes fossil carbon from the "+Math.round(ss*100)+"% synthetic share)":"")+"."]});});
+  add("eol",{name:"end-of-life treatment, textile",loc:dc,stage:"eol",kind:"fg",amt:kg,unit:"kg waste",ch:ech,
+    basis:["model",eolName()+"."]});
+  // cumulative impacts
+  function cum(id){var n=N[id];if(n.cum)return n.cum;var c={co2:n.dir.co2,water:n.dir.water,mp:n.dir.mp};n.ch.forEach(function(k){var x=cum(k);CK.forEach(function(q){c[q]+=x[q];});N[k].parent=id;});n.cum=c;return c;}
+  cum("root");
+  return N;
+}
+
+// ---------- rendering: header, strip, functional unit ----------
+function fuSentence(){
+  return "1 "+blendName(S.blend)+" "+(S.size?S.size+" ":"")+lc(gn(S.g))+", "+S.wt+" g, used for "+S.years+" year"+(S.years>1?"s":"");}
+function renderHead(M){
+  $("h1").innerHTML="Life cycle of <em>1</em> "+esc(blendName(S.blend))+" "+esc(lc(gn(S.g)));
+  $("fuText").textContent=fuSentence();
+  var R=M.R,rows=[["Reference flow","1 piece · "+S.wt+" g"],["Composition",S.blend.map(function(x){return x[1]+"% "+lc(fn(x[0]));}).join(", ")],["Made in",cn(S.o)],["Sold and used in",cn(S.d)],["Service",S.wpy*S.years+" wears in "+S.years+" yr"],["Care",R.washes+" washes at "+S.temp+" °C"+(S.dry?" + dryer":"")],["Freight",modeName(R.mode)+" · "+comma(R.km)+" km"],["End of life",eolName()]];
+  $("tagRows").innerHTML=rows.map(function(r){return "<div><span>"+esc(r[0])+"</span><span>"+esc(r[1])+"</span></div>";}).join("");
+  $("fuMini").innerHTML="<b>Functional unit</b> · "+esc(fuSentence());
+  $("kpis").innerHTML=CK.map(function(c){var C=CATS[c];return '<button type="button" class="kpi" data-cat="'+c+'" aria-pressed="'+(S.cat===c)+'" title="'+esc(C.n)+'"><span class="dot" style="background:'+cv(C.k)+'"></span><b>'+fmt(c,M.tot[c])+'</b><small>'+esc(C.us)+'</small></button>';}).join("");
+}
+
+// ---------- controls ----------
+function opt(v,l,sel){return '<option value="'+esc(v)+'"'+(sel?" selected":"")+">"+esc(l)+"</option>";}
+function buildCtl(){
+  var fibs=Object.keys(FIB).sort(function(a,b){return fn(a).localeCompare(fn(b));});
+  var ctry=Object.keys(CTRY).filter(function(k){return k!=="other";}).sort(function(a,b){return cn(a).localeCompare(cn(b));}).concat(["other"]);
+  var h="";
+  h+='<div class="f"><label for="c-g">Garment</label><select id="c-g">'+Object.keys(GAR).map(function(k){return opt(k,gn(k));}).join("")+'</select></div>';
+  h+='<div class="f"><label for="c-size">Size</label><select id="c-size">'+SIZES.map(function(x){return opt(x[0],x[0]||"Not set");}).join("")+'</select></div>';
+  h+='<div class="f"><label for="c-wt">Weight (g)</label><input id="c-wt" type="number" min="20" max="3000" step="1"></div>';
+  h+='<div class="f"><label for="c-f1">Main fibre</label><select id="c-f1">'+fibs.map(function(k){return opt(k,fn(k));}).join("")+'</select></div>';
+  h+='<div class="f"><label for="c-f2">Second fibre</label><select id="c-f2">'+opt("none","None")+fibs.map(function(k){return opt(k,fn(k));}).join("")+'</select></div>';
+  h+='<div class="f"><label for="c-p">Main fibre share</label><input id="c-p" type="range" min="50" max="99" step="1"><div class="rv"><span id="c-pv"></span><span id="c-pv2"></span></div></div>';
+  h+='<div class="f"><label for="c-o">Made in</label><select id="c-o">'+ctry.map(function(k){return opt(k,cn(k));}).join("")+'</select></div>';
+  h+='<div class="f"><label for="c-d">Sold and used in</label><select id="c-d">'+Object.keys(DEST).map(function(k){return opt(k,cn(k));}).join("")+'</select></div>';
+  h+='<div class="f"><label>Transport</label><div class="seg" id="c-m">'+["sea","air","road"].map(function(m){return '<button type="button" data-v="'+m+'">'+esc(modeName(m))+'</button>';}).join("")+'</div></div>';
+  h+='<div class="f"><label for="c-y">Years of use</label><input id="c-y" type="number" min="1" max="10" step="1"></div>';
+  h+='<div class="f"><label for="c-w">Wears per year</label><input id="c-w" type="range" min="1" max="400" step="1"><div class="rv"><span id="c-wv"></span><span>per year</span></div></div>';
+  h+='<div class="f"><label for="c-x">Washes per year</label><input id="c-x" type="range" min="0" max="200" step="1"><div class="rv"><span id="c-xv"></span><span id="c-xv2"></span></div></div>';
+  h+='<div class="f"><label>Wash temperature</label><div class="seg" id="c-t">'+[30,40,60].map(function(t){return '<button type="button" data-v="'+t+'">'+t+' °C</button>';}).join("")+'</div></div>';
+  h+='<div class="f"><label>Tumble dryer</label><div class="seg" id="c-dr"><button type="button" data-v="0">Off</button><button type="button" data-v="1">On</button></div></div>';
+  h+='<div class="f"><label for="c-e">End of life</label><select id="c-e"></select></div>';
+  $("ctl").innerHTML=h;
+  $("ctl").addEventListener("input",onCtl);$("ctl").addEventListener("change",onCtl);
+  $("ctl").addEventListener("click",function(e){var b=e.target.closest(".seg button");if(!b||b.disabled)return;var g=b.parentNode.id,v=b.dataset.v;
+    if(g==="c-m")S.m=v;else if(g==="c-t")S.temp=+v;else if(g==="c-dr")S.dry=v==="1";render();});
+}
+function setBlend(f1,f2,p){if(f2==="none"||f2===f1)S.blend=[[f1,100]];else S.blend=[[f1,p],[f2,100-p]];}
+function onCtl(e){var t=e.target,id=t.id;if(!id)return;
+  var f1=S.blend[0][0],f2=S.blend[1]?S.blend[1][0]:"none",p=S.blend[1]?S.blend[0][1]:80;
+  if(id==="c-g"){S.g=t.value;var G=GAR[S.g];S.blend=G.blend.map(function(x){return x.slice();});S.o=G.o;S.m=G.m;S.wt=Math.round(G.w*1000*sizeF());}
+  else if(id==="c-size"){S.size=t.value;S.wt=Math.round(GAR[S.g].w*1000*sizeF());}
+  else if(id==="c-wt"){var v=parseInt(t.value,10);if(!(v>=20&&v<=3000))return;S.wt=v;}
+  else if(id==="c-f1")setBlend(t.value,f2,p);
+  else if(id==="c-f2")setBlend(f1,t.value,p);
+  else if(id==="c-p")setBlend(f1,f2,+t.value);
+  else if(id==="c-o")S.o=t.value;
+  else if(id==="c-d")S.d=t.value;
+  else if(id==="c-y"){var y=parseInt(t.value,10);if(!(y>=1&&y<=10))return;S.years=y;}
+  else if(id==="c-w"){S.wpy=+t.value;if(S.wash>S.wpy)S.wash=S.wpy;}
+  else if(id==="c-x"){S.wash=Math.min(+t.value,S.wpy);}
+  else if(id==="c-e")S.eol=t.value;
+  else return;
+  render(id);}
+function sizeF(){for(var i=0;i<SIZES.length;i++)if(SIZES[i][0]===S.size)return SIZES[i][0]?SIZES[i][1]:1;return 1;}
+function syncCtl(src){
+  function sv(id,v){var e=$(id);if(e&&id!==src)e.value=v;}
+  sv("c-g",S.g);sv("c-size",S.size);sv("c-wt",S.wt);sv("c-f1",S.blend[0][0]);sv("c-f2",S.blend[1]?S.blend[1][0]:"none");
+  var two=!!S.blend[1];$("c-p").disabled=!two;sv("c-p",two?S.blend[0][1]:100);
+  $("c-pv").textContent=(two?S.blend[0][1]:100)+"% "+lc(fn(S.blend[0][0]));$("c-pv2").textContent=two?S.blend[1][1]+"% "+lc(fn(S.blend[1][0])):"";
+  sv("c-o",S.o);sv("c-d",S.d);sv("c-y",S.years);sv("c-w",S.wpy);$("c-wv").textContent=S.wpy+" wears";
+  $("c-x").max=S.wpy;sv("c-x",S.wash);$("c-xv").textContent=S.wash+" washes";$("c-xv2").textContent=S.wash?"every "+fa(S.wpy/S.wash)+" wears":"never washed";
+  var road=roadOk(S.o,S.d);if(S.m==="road"&&!road)S.m="sea";
+  [].forEach.call($("c-m").children,function(b){b.setAttribute("aria-pressed",b.dataset.v===S.m);b.disabled=b.dataset.v==="road"&&!road;b.title=b.disabled?"No road route between these countries":"";});
+  [].forEach.call($("c-t").children,function(b){b.setAttribute("aria-pressed",+b.dataset.v===S.temp);});
+  [].forEach.call($("c-dr").children,function(b){b.setAttribute("aria-pressed",(b.dataset.v==="1")===S.dry);});
+  var k=eolKey(sim()),mixN=NAMES.E[k==="eu"?"mix":"mix_"+k]||NAMES.E.mix;
+  $("c-e").innerHTML=opt("mix",mixN,S.eol==="mix")+["landfill","incin","recycle","resale"].map(function(x){return opt(x,NAMES.E[x],S.eol===x);}).join("");
+  $("c-w").max=Math.max(200,S.wpy);$("ctlHint").textContent=(S.size?"Size sets a default weight ("+S.size+" = "+Math.round(sizeF()*100)+"% of the size M weight, an assumption); type a measured weight to override it. ":"Pick a size to set a default weight, or type a measured weight. ")+"Washes are capped at the number of wears.";
+}
+
+// ---------- system boundary ----------
+function renderChain(M){
+  var h='<span class="end">Cradle</span>';
+  STG.forEach(function(x,i){var v=M.st[x.k][S.cat],loc=x.k==="raw"?"GLO":["yarn","wet","asm"].indexOf(x.k)>-1?ISO2[S.o]:x.k==="fr"?ISO2[S.o]+"→"+ISO2[S.d]:ISO2[S.d];
+    h+='<button type="button" class="stg'+(S.stg===x.k?" on":"")+'" data-stg="'+x.k+'" style="--c:'+cv("--s-"+x.k)+'"><span class="loc">'+loc+'</span><b>'+esc(x.n)+'</b><small>'+esc(x.d)+'</small><small class="num">'+fmt(S.cat,v)+" "+esc(CATS[S.cat].us)+'</small></button>';
+    if(i<STG.length-1)h+='<span class="ar" aria-hidden="true">→</span>';});
+  h+='<span class="end g">Grave</span>';
+  $("chain").innerHTML=h;
+  var x=SK[S.stg];$("stgDetail").innerHTML="<b>"+esc(x.n)+".</b> "+esc(x.inc);
+}
+function renderCats(){
+  $("cats").innerHTML=CK.map(function(c){var C=CATS[c];return '<span class="catchip" style="--k:'+cv(C.k)+'" title="'+esc(C.ind+". "+C.basis)+'">'+ICON[c]+esc(C.n)+' <small>'+esc(C.us)+'</small></span>';}).join("");
+}
+
+// ---------- process tree ----------
+var NW=184,NH=42,CW=226,RH=52,PAD=18;
+function renderTree(N,M){
+  var depth={},order=[],maxD=0;
+  (function walk(id,d){depth[id]=d;maxD=Math.max(maxD,d);var n=N[id];if(!n.ch.length)order.push(id);n.ch.forEach(function(k){walk(k,d+1);});})("root",0);
+  var pos={};order.forEach(function(id,i){pos[id]={y:PAD+i*RH};});
+  (function place(id){var n=N[id];if(n.ch.length){n.ch.forEach(place);var ys=n.ch.map(function(k){return pos[k].y;});pos[id]={y:(Math.min.apply(null,ys)+Math.max.apply(null,ys))/2};}})("root");
+  Object.keys(pos).forEach(function(id){pos[id].x=PAD+(maxD-depth[id])*CW;});
+  var W=PAD*2+maxD*CW+NW,H=PAD*2+(order.length-1)*RH+NH,cat=S.cat,T=M.tot[cat]||0;
+  var path={};var p=S.sel;while(p){path[p]=1;p=N[p]&&N[p].parent;}
+  var e="",nd="";
+  Object.keys(N).forEach(function(id){var n=N[id];if(id==="root")return;var a=pos[id],b=pos[n.parent],sh=T?n.cum[cat]/T:0;
+    var x1=a.x+NW,y1=a.y+NH/2,x2=b.x,y2=b.y+NH/2,mx=(x1+x2)/2,col=n.stage?cv("--s-"+n.stage):cv("--muted");
+    e+='<path class="edge'+(S.sel!=="root"&&!(path[id])?" dim":"")+'" d="M'+x1+" "+y1+"C"+mx+" "+y1+" "+mx+" "+y2+" "+x2+" "+y2+'" stroke="'+(T?col:cv("--rule"))+'" stroke-opacity="'+(T?.55:1)+'" stroke-width="'+(1.4+16*sh).toFixed(2)+'"><title>'+esc(fa(n.amt)+" "+n.unit)+'</title></path>';});
+  Object.keys(N).forEach(function(id){var n=N[id],a=pos[id],sh=T?n.cum[cat]/T:0,lbl=n.name+(n.loc?" | "+n.loc:""),short=lbl.length>29?lbl.slice(0,28)+"…":lbl;
+    var amt=(n.approx?"≈ ":"")+fa(n.amt)+" "+n.unit,shs=T?pct(n.cum[cat],T):"";
+    var stripe=n.stage?cv("--s-"+n.stage):cv("--ink");
+    nd+='<g class="nd '+n.kind+(S.sel===id?" sel":"")+(path[id]&&S.sel!=="root"?" path":"")+'" data-id="'+id+'" transform="translate('+a.x+","+a.y+')" tabindex="0" role="button" aria-label="'+esc(lbl+", "+amt+(shs?", "+shs+" of "+CATS[cat].n:""))+'">'+
+      '<title>'+esc(lbl)+'</title><rect class="box" width="'+NW+'" height="'+NH+'" rx="7"/>'+
+      '<rect x="0" y="6" width="3" height="'+(NH-12)+'" rx="1.5" fill="'+stripe+'"/>'+
+      '<text x="10" y="17">'+esc(short)+'</text><text class="amt" x="10" y="32">'+esc(amt)+'</text>'+
+      (shs?'<text class="amt" x="'+(NW-8)+'" y="32" text-anchor="end" style="fill:'+cv(CATS[cat].k)+';font-weight:600">'+shs+'</text>':"")+
+      '<rect class="shbar" x="1" y="'+(NH-3)+'" width="'+(NW-2)+'" height="2" rx="1"/><rect x="1" y="'+(NH-3)+'" width="'+Math.max(0,(NW-2)*sh).toFixed(1)+'" height="2" rx="1" fill="'+cv(CATS[cat].k)+'"/></g>';});
+  var svg=$("tree");svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  svg.innerHTML=e+nd;
+  $("treeCatName").textContent=CATS[cat].n.toLowerCase();
+  $("treeCat").innerHTML=CK.map(function(c){return '<button type="button" data-cat="'+c+'" aria-pressed="'+(c===cat)+'">'+esc(CATS[c].n)+'</button>';}).join("");
+}
+function renderPanel(N,M){
+  var n=N[S.sel]||N.root,lbl=n.name+(n.loc?" | "+n.loc:""),B={model:["b-model","Model"],derived:["b-derived","Derived"],assume:["b-assume","Assumption"]}[n.basis[0]];
+  var h='<div class="phd"><h3>'+esc(n.stage?SK[n.stage].n:"Reference flow")+'</h3><span class="badge '+B[0]+'">'+B[1]+'</span><p class="pn">'+esc(lbl)+'</p></div><div class="pcol">';
+  h+='<p class="tl">Output</p><table><tr><td>'+esc(n.kind==="root"?"Garment, used and disposed of":"Reference product")+'</td><td>'+(n.approx?"≈ ":"")+fa(n.amt)+" "+esc(n.unit)+'</td></tr></table>';
+  if(n.ch.length){h+='<p class="tl">Inputs</p><table>'+n.ch.map(function(k){var c=N[k];return '<tr><td><a href="#tree" data-go="'+k+'">'+esc(c.name)+'</a></td><td>'+(c.approx?"≈ ":"")+fa(c.amt)+" "+esc(c.unit)+'</td></tr>';}).join("")+'</table>';}
+  h+='</div><div class="pcol">';var el=[];if(n.dir.co2)el.push(["Greenhouse gases, to air",fa(n.dir.co2)+" kg CO₂e"]);if(n.dir.water)el.push(["Water, consumed",comma(Math.round(n.dir.water))+" L"]);
+  if(n.dir.mp)el.push(["Microfibres, to wastewater",comma(Math.round(n.dir.mp))]);if(n.pest)el.push(["Pesticide active ingredient, to soil",fa(n.pest)+" g"]);
+  h+='<p class="tl">Direct elementary flows</p>'+(el.length?'<table>'+el.map(function(r){return "<tr><td>"+esc(r[0])+"</td><td>"+esc(r[1])+"</td></tr>";}).join("")+"</table>":'<p class="basis" style="margin-top:8px">None directly. Its impacts come through its inputs.</p>')+'</div><div class="pcol">';
+  h+='<p class="tl">Contribution to the whole life cycle</p>'+CK.map(function(c){var T=M.tot[c],v=n.cum[c],w=T?v/T*100:0;return '<div class="cumrow"><span>'+esc(CATS[c].us)+'</span><span class="tr"><i style="width:'+w.toFixed(1)+'%;background:'+cv(CATS[c].k)+'"></i></span><span>'+(T?pct(v,T):"–")+'</span></div>';}).join("");
+  h+='<p class="basis">'+esc(n.basis[1])+'</p></div>';
+  $("panel").innerHTML=h;
+}
+
+// ---------- life cycle inventory table ----------
+function lciRows(N,M){
+  var rows=[];function R(stg,flow,proc,type,amt,unit,b,approx){rows.push({stg:stg,flow:flow,proc:proc,type:type,amt:amt,unit:unit,b:b,approx:approx});}
+  S.blend.forEach(function(b,i){var n=N["fib"+i];R("raw","Fibre, "+lc(fn(b[0])),n.name,"product",n.amt,"kg","model");R("raw","Water, consumed",n.name,"resource",n.dir.water,"L","model");
+    if(n.pest)R("raw","Pesticide active ingredient",n.name,"emission",n.pest,"g","model");R("raw","Greenhouse gases",n.name,"emission",n.dir.co2,"kg CO₂e","model");});
+  ["yarn","wet","asm"].forEach(function(k){var n=N[k];
+    R(k,"Electricity, medium voltage",n.name,"input",N["e_"+k].amt,"kWh","derived");R(k,"Heat and other process inputs",n.name,"input",N["h_"+k].amt,"MJ","assume",true);
+    R(k,"Greenhouse gases",n.name,"emission",N["e_"+k].dir.co2+N["h_"+k].dir.co2,"kg CO₂e","model");R(k,k==="asm"?"Garment, packed":k==="wet"?"Fabric, dyed and finished":"Fabric, knitted or woven",n.name,"product",n.amt,"kg","model");});
+  N.fr.ch.forEach(function(k){var n=N[k];R("fr","Transport, "+n.name.replace("transport, freight, ",""),N.fr.name,"input",n.amt,"tkm","derived");});
+  R("fr","Greenhouse gases",N.fr.name,"emission",N.fr.cum.co2,"kg CO₂e","model");
+  R("use","Electricity, low voltage (washing)",N.use.name,"input",N.e_wash.amt,"kWh","model");if(N.e_dry)R("use","Electricity, low voltage (dryer)",N.use.name,"input",N.e_dry.amt,"kWh","model");
+  R("use","Tap water",N.use.name,"input",N.w_tap.amt,"L","model");R("use","Water, consumed",N.use.name,"resource",N.w_tap.amt,"L","model");
+  R("use","Microfibres, synthetic, to wastewater",N.use.name,"emission",N.use.dir.mp,"fibres","model");R("use","Greenhouse gases",N.use.name,"emission",N.use.cum.co2,"kg CO₂e","model");
+  N.eol.ch.forEach(function(k){var n=N[k];R("eol","Textile waste to "+n.name.replace(/^treatment of textile waste, |^textile |^reuse via /,""),N.eol.name,"waste",n.amt,"kg","model");});
+  R("eol","Greenhouse gases",N.eol.name,"emission",N.eol.cum.co2,"kg CO₂e","model");
+  return rows;
+}
+var LCIF=[["all","All flows"],["input","Inputs"],["out","Products and waste"],["elem","Elementary flows"]];
+var TYPEL={input:["","Input"],product:["","Product"],waste:["","Waste"],resource:["el","Resource"],emission:["em","Emission"]};
+function renderLCI(N,M){
+  var rows=lciRows(N,M),f=S.lciF;
+  rows=rows.filter(function(r){return f==="all"||(f==="input"&&r.type==="input")||(f==="out"&&(r.type==="product"||r.type==="waste"))||(f==="elem"&&(r.type==="resource"||r.type==="emission"));});
+  var B={model:'<span class="badge b-model">Model</span>',derived:'<span class="badge b-derived">Derived</span>',assume:'<span class="badge b-assume">Assumption</span>'};
+  var h='<thead><tr><th>Flow</th><th>Process</th><th>Type</th><th class="n">Amount</th><th>Unit</th><th>Basis</th></tr></thead><tbody>';
+  var anyOpen=false;
+  STG.forEach(function(x){var rs=rows.filter(function(r){return r.stg===x.k;});if(!rs.length)return;var open=!!S.lciOpen[x.k];if(open)anyOpen=true;
+    h+='<tr class="grp"><td colspan="6"><button type="button" class="gbtn" data-lg="'+x.k+'" aria-expanded="'+open+'"><span class="chev" aria-hidden="true">›</span><span class="sw" style="background:'+cv("--s-"+x.k)+'"></span><span class="gn">'+esc(x.n)+'</span><span class="gc">'+rs.length+' flow'+(rs.length>1?"s":"")+'</span><span class="gv num">'+fmt("co2",M.st[x.k].co2)+' kg CO₂e</span></button></td></tr>';
+    if(open)rs.forEach(function(r){var T=TYPEL[r.type];h+='<tr><td>'+esc(r.flow)+'</td><td class="muted">'+esc(r.proc)+'</td><td><span class="dir '+T[0]+'">'+T[1]+'</span></td><td class="n">'+(r.approx?"≈ ":"")+(r.unit==="fibres"||r.unit==="L"?comma(Math.round(r.amt)):fa(r.amt))+'</td><td>'+esc(r.unit)+'</td><td>'+B[r.b]+'</td></tr>';});});
+  $("lci").innerHTML=h+"</tbody>";
+  $("lciFilter").innerHTML=LCIF.map(function(x){return '<button type="button" class="chip" data-f="'+x[0]+'" aria-pressed="'+(S.lciF===x[0])+'">'+x[1]+'</button>';}).join("")+'<button type="button" class="chip chip-x" data-lx="'+(anyOpen?"close":"open")+'">'+(anyOpen?"Collapse all":"Expand all")+'</button>';
+}
+
+// ---------- impact assessment ----------
+function equiv(c,v,M){if(c==="co2")return ["Same as driving a petrol car",comma(Math.round(v/CAR))+" km"];if(c==="water")return ["Same as showers of 65 L",fa(v/65)];return ["Shed per wash",comma(M.R.mpWash)];}
+function renderLCIA(M){
+  var c=S.cat,C=CATS[c],T=M.tot[c],R=M.R,wears=S.wpy*S.years,eq=equiv(c,T,M);
+  $("catTabs").innerHTML=CK.map(function(k){return '<button type="button" class="ctab" data-cat="'+k+'" style="--k:'+cv(CATS[k].k)+'" aria-pressed="'+(k===c)+'">'+ICON[k]+esc(CATS[k].n)+'</button>';}).join("");
+  $("big").innerHTML='<p class="eyebrow">'+esc(C.n)+' · per functional unit</p><p class="v num" style="color:'+cv(C.k)+'">'+fmt(c,T)+'</p><p class="u">'+esc(C.u)+'</p>'+
+    '<div class="row"><span>Per year of use</span><span>'+fmt(c,T/S.years)+" "+esc(C.us)+'</span></div>'+
+    '<div class="row"><span>Per wear</span><span>'+(wears?fmt(c,T/wears):"–")+" "+esc(C.us)+'</span></div>'+
+    '<div class="row"><span>'+esc(eq[0])+'</span><span>'+esc(eq[1])+'</span></div>'+
+    '<div class="row"><span>Level</span><span>'+esc(C.lvl)+'</span></div>';
+  var acc=0,h="",scale=T||1;
+  STG.forEach(function(x){var v=M.st[x.k][c],l=acc/scale*100,w=v/scale*100;
+    h+='<div class="wfrow"><span class="lb"><i style="background:'+cv("--s-"+x.k)+'"></i><span>'+esc(x.n)+'</span></span><span class="wftrack">'+(acc?'<span class="guide" style="left:'+l.toFixed(2)+'%"></span>':"")+'<span class="seg2" style="left:'+l.toFixed(2)+'%;width:'+Math.max(w,v>0?.4:0).toFixed(2)+'%;background:'+cv("--s-"+x.k)+'"></span></span><span class="v2">'+(v>0?"+"+fmt(c,v):"0")+'</span></div>';acc+=v;});
+  h+='<div class="wfrow tot"><span class="lb"><span>Total</span></span><span class="wftrack"><span class="seg2" style="left:0;width:'+(T?100:0)+'%;background:'+cv(C.k)+'"></span></span><span class="v2"><b>'+fmt(c,T)+'</b></span></div>';
+  if(!T)h+='<p class="note">'+(c==="mp"?"No synthetic fibres in this garment, so Hangnote counts no microplastic release. Natural fibres also shed fibres, but they are outside this indicator.":"Nothing to show.")+'</p>';
+  $("wf").innerHTML=h;
+  var m='<thead><tr><th>Stage</th>'+CK.map(function(k){return '<th style="color:'+cv(CATS[k].k)+'">'+esc(CATS[k].n)+'</th>';}).join("")+'</tr></thead><tbody>';
+  STG.forEach(function(x){m+='<tr><td><i style="background:'+cv("--s-"+x.k)+'"></i>'+esc(x.n)+'</td>'+CK.map(function(k){var T=M.tot[k],v=M.st[x.k][k],p=T?v/T*100:0;
+    return '<td style="background:color-mix(in srgb,'+cv(CATS[k].k)+' '+Math.round(Math.min(100,p)*.85)+'%,transparent);color:'+(p>55?cv("--card"):cv("--ink"))+'">'+(T?pct(v,T):"–")+'</td>';}).join("")+'</tr>';});
+  $("matrix").innerHTML=m+"</tbody>";
+}
+
+// ---------- interpretation ----------
+function ring(p,col){var r=30,c=2*Math.PI*r,d=c*Math.min(1,p);return '<svg class="ring" viewBox="0 0 74 74" aria-hidden="true"><circle cx="37" cy="37" r="'+r+'" fill="none" stroke="'+cv("--soft")+'" stroke-width="9"/>'+(p>0?'<circle cx="37" cy="37" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="9" stroke-dasharray="'+d.toFixed(1)+" "+c.toFixed(1)+'" transform="rotate(-90 37 37)" stroke-linecap="round"/>':'')+'<text x="37" y="41" text-anchor="middle" style="font:700 14px var(--mono);fill:'+cv("--ink")+'">'+Math.round(p*100)+'%</text></svg>';}
+function topStage(M,c){var b=null;STG.forEach(function(x){if(!b||M.st[x.k][c]>M.st[b.k][c])b=x;});return b;}
+function sens(M){
+  var s0=sim(),B=M.tot.co2,rows=[];
+  function tc(s){return calc(s).total;}
+  function mod(o){var s=JSON.parse(JSON.stringify(s0));for(var k in o)s[k]=o[k];return s;}
+  var gs=Object.keys(CTRY).filter(function(k){return k!=="other";}).map(function(k){return CTRY[k].g;}),gmin=Math.min.apply(null,gs),gmax=Math.max.apply(null,gs),g0=CTRY[S.o].g;
+  CTRY[S.o].g=gmin;var a=tc(s0);CTRY[S.o].g=gmax;var b=tc(s0);CTRY[S.o].g=g0;
+  rows.push({n:"Factory grid",d:gmin+" to "+gmax+" g CO₂e/kWh",lo:a,hi:b,loL:"cleanest grid",hiL:"most carbon-heavy grid"});
+  var cand=["cotton","ocotton","rcotton","poly","rpoly","lyocell","hemp","linen","viscose"],best=null,worst=null;
+  cand.forEach(function(f){var bl=s0.blend.map(function(x,i){return i===0?[f,x[1]]:x.slice();});var v=tc(mod({blend:bl}));if(!best||v<best[1])best=[f,v];if(!worst||v>worst[1])worst=[f,v];});
+  rows.push({n:"Main fibre",d:fn(best[0])+" to "+lc(fn(worst[0])),lo:best[1],hi:worst[1],loL:lc(fn(best[0])),hiL:lc(fn(worst[0]))});
+  rows.push({n:"Freight",d:"Container ship or air freight",lo:tc(mod({m:"sea"})),hi:tc(mod({m:"air"})),loL:"ship",hiL:"air"});
+  rows.push({n:"Number of washes",d:"Half or double",lo:tc(mod({washes:s0.washes/2})),hi:tc(mod({washes:Math.min(s0.wears,s0.washes*2)})),loL:"half",hiL:"double"});
+  rows.push({n:"Wash temperature",d:"30 °C or 60 °C",lo:tc(mod({temp:30})),hi:tc(mod({temp:60})),loL:"30 °C",hiL:"60 °C"});
+  rows.push({n:"Tumble dryer",d:"Off or on",lo:tc(mod({dry:false})),hi:tc(mod({dry:true})),loL:"off",hiL:"on"});
+  rows.push({n:"End of life",d:"Resale or landfill",lo:tc(mod({eol:"resale"})),hi:tc(mod({eol:"landfill"})),loL:"resale",hiL:"landfill"});
+  rows.push({n:"Garment weight",d:"±10%",lo:tc(mod({wt:Math.round(S.wt*.9)})),hi:tc(mod({wt:Math.round(S.wt*1.1)})),loL:"−10%",hiL:"+10%"});
+  rows.forEach(function(r){var l=Math.min(r.lo,r.hi),h=Math.max(r.lo,r.hi);r.l=l;r.h=h;r.rng=h-l;});
+  rows.sort(function(a,b){return b.rng-a.rng;});return {B:B,rows:rows};
+}
+function renderInterp(M){
+  $("hots").innerHTML=CK.map(function(c){var T=M.tot[c],x=topStage(M,c),C=CATS[c];
+    if(!T)return '<div class="card hot"><div class="top2">'+ring(0,cv(C.k))+'<b>'+esc(C.n)+': nothing counted</b></div><p class="muted" style="font-size:13px">No synthetic fibres, so no microfibres are counted for this garment.</p></div>';
+    var p=M.st[x.k][c]/T;return '<div class="card hot"><div class="top2">'+ring(p,cv("--s-"+x.k))+'<div><p class="eyebrow" style="color:'+cv(C.k)+'">'+esc(C.n)+'</p><b>'+esc(x.n)+' is the hotspot</b></div></div><p class="muted" style="font-size:13px">'+esc(fmt(c,M.st[x.k][c])+" of "+fmt(c,T)+" "+C.us+". "+x.inc)+'</p></div>';}).join("");
+  var Z=sens(M),B=Z.B,mx=0;Z.rows.forEach(function(r){mx=Math.max(mx,Math.abs(r.l-B),Math.abs(r.h-B));});mx=mx||1;
+  $("torUnit").textContent="Climate change, kg CO₂e per functional unit (this study: "+fmt("co2",B)+")";
+  $("tor").innerHTML=Z.rows.map(function(r){var L=50+(r.l-B)/mx*38,H=50+(r.h-B)/mx*38,lo=r.l<B,hi=r.h>B;
+    return '<div class="trow"><span class="lb">'+esc(r.n)+'<small>'+esc(r.d)+'</small></span><span class="ttrack"><span class="axis"></span>'+
+      (lo?'<span class="bar lo" style="left:'+L.toFixed(2)+'%;width:'+(50-L).toFixed(2)+'%"></span><span class="tv" style="right:'+(100-L+1).toFixed(2)+'%">'+fmt("co2",r.l)+'</span>':"")+
+      (hi?'<span class="bar hi" style="left:50%;width:'+(H-50).toFixed(2)+'%"></span><span class="tv" style="left:'+(H+1).toFixed(2)+'%">'+fmt("co2",r.h)+'</span>':"")+
+      (!lo&&!hi?'<span class="tv" style="left:52%">no change</span>':"")+'</span></div>';}).join("");
+  // uncertainty
+  var U=CK.map(function(c){var T=M.tot[c],v=0;STG.forEach(function(x){var u=c==="mp"?UNC_MP:UNC[x.k];v+=Math.pow(M.st[x.k][c]*u,2);});var sd=Math.sqrt(v);return {c:c,T:T,lo:Math.max(0,T-sd),hi:T+sd};});
+  $("unc").innerHTML=U.map(function(u){var C=CATS[u.c],max=u.hi*1.15||1;
+    return '<div class="urow"><span>'+esc(C.n)+'</span><span class="utrack">'+(u.T?'<span class="rng" style="left:'+(u.lo/max*100).toFixed(2)+'%;width:'+((u.hi-u.lo)/max*100).toFixed(2)+'%;background:'+cv(C.k)+'"></span><span class="pt" style="left:'+(u.T/max*100).toFixed(2)+'%;background:'+cv(C.k)+'"></span>':"")+'</span><span>'+(u.T?fmt(u.c,u.lo)+" – "+fmt(u.c,u.hi)+" "+esc(C.us):"not counted")+'</span></div>';}).join("")+
+    '<p class="note">Each stage gets the uncertainty range from the Methodology page (fibres ±25%, mill stages ±15%, freight ±25%), plus assumed ranges for use (±20%), end of life (±30%) and microfibre shedding (±50%). Ranges are combined as independent errors.</p>';
+  // conclusions
+  var T=M.tot,prod=M.st.raw.co2+M.st.yarn.co2+M.st.wet.co2+M.st.asm.co2,top=topStage(M,"co2"),w0=Z.rows[0];
+  var levers=Z.rows.filter(function(r){return r.l<B-0.005;}).slice(0,3);
+  var h='<p>For <b>'+esc(fuSentence())+'</b>, this study estimates <b>'+fmt("co2",T.co2)+' kg CO₂e</b>, <b>'+fmt("water",T.water)+' litres of water</b> and <b>'+(T.mp?fmt("mp",T.mp)+" synthetic microfibres":"no synthetic microfibres")+'</b> over the whole life cycle.</p>';
+  h+='<p>Making the garment causes '+pct(prod,T.co2)+' of the climate impact, and '+esc(lc(top.n))+' alone causes '+pct(M.st[top.k].co2,T.co2)+'. '+(T.water?'Water use comes mostly from '+esc(lc(topStage(M,"water").n))+' ('+pct(M.st[topStage(M,"water").k].water,T.water)+').':"")+' The result moves most with the '+esc(lc(w0.n))+': from '+fmt("co2",w0.l)+' to '+fmt("co2",w0.h)+' kg CO₂e.</p>';
+  if(levers.length)h+='<p class="eyebrow" style="margin-top:16px">Biggest levers</p><ul>'+levers.map(function(r){return '<li><b>'+esc(r.n)+'</b> ('+esc(r.loL)+'): '+fmt("co2",B-r.l)+' kg CO₂e less, '+pct(B-r.l,B)+' of the total.</li>';}).join("")+'</ul>';
+  h+='<p class="eyebrow" style="margin-top:16px">Limitations</p><ul><li>Generic factors, not data from this garment\'s actual suppliers.</li><li>Mill stages use one factor per kg, adjusted only for the factory grid; fabric type and dye class are not modelled.</li><li>Greenhouse gases are reported as CO₂e only. Water is not weighted by scarcity, and microfibres are a count, not an impact.</li><li>Process water, detergent, capital goods and retail are outside the system boundary.</li></ul>';
+  $("concl").innerHTML=h;
+}
+
+// ---------- main ----------
+var NODES=null,MODEL=null;
+function render(src){
+  syncCtl(src);
+  MODEL=run(sim());NODES=build(MODEL);
+  if(!NODES[S.sel])S.sel="root";
+  renderHead(MODEL);renderChain(MODEL);renderTree(NODES,MODEL);renderPanel(NODES,MODEL);renderLCI(NODES,MODEL);renderLCIA(MODEL);renderInterp(MODEL);
+}
+function setCat(c){if(!CATS[c])return;S.cat=c;render();}
+document.addEventListener("click",function(e){
+  var k=e.target.closest("[data-cat]");if(k){setCat(k.dataset.cat);return;}
+  var g=e.target.closest("#tree .nd");if(g){S.sel=g.dataset.id;renderTree(NODES,MODEL);renderPanel(NODES,MODEL);return;}
+  var a=e.target.closest("[data-go]");if(a){e.preventDefault();S.sel=a.dataset.go;renderTree(NODES,MODEL);renderPanel(NODES,MODEL);var el=document.querySelector('#tree .nd[data-id="'+S.sel+'"]');if(el&&el.scrollIntoView)el.scrollIntoView({block:"nearest",inline:"center"});return;}
+  var f=e.target.closest("[data-f]");if(f){S.lciF=f.dataset.f;renderLCI(NODES,MODEL);return;}
+  var lg=e.target.closest("[data-lg]");if(lg){S.lciOpen[lg.dataset.lg]=!S.lciOpen[lg.dataset.lg];renderLCI(NODES,MODEL);var nb=document.querySelector('[data-lg="'+lg.dataset.lg+'"]');if(nb)nb.focus();return;}
+  var lx=e.target.closest("[data-lx]");if(lx){var op=lx.dataset.lx==="open";STG.forEach(function(x){S.lciOpen[x.k]=op;});renderLCI(NODES,MODEL);return;}
+  var s=e.target.closest("[data-stg]");if(s){S.stg=s.dataset.stg;renderChain(MODEL);return;}
+});
+document.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.closest&&e.target.closest("#tree .nd")){e.preventDefault();e.target.closest("#tree .nd").dispatchEvent(new MouseEvent("click",{bubbles:true}));}});
+// site navigation labels, language switch and notice (the study itself is English only for now)
+var TABS={en:["Home","Read your tag","Full Breakdown","Methodology","Learn","About"],it:["Home","Leggi l’etichetta","Approfondimento LCA","Metodologia","Scopri","Il progetto"],es:["Inicio","Lee tu etiqueta","Análisis LCA","Metodología","Aprende","El proyecto"],de:["Start","Etikett lesen","LCA im Detail","Methodik","Wissen","Über"]};
+var LNOTE={it:"Questa pagina per ora è disponibile solo in inglese.",es:"Por ahora esta página solo está disponible en inglés.",de:"Diese Seite gibt es vorerst nur auf Englisch."};
+var BETA={en:"Beta: an early version. Estimates may change when the data and methods are updated.",it:"Beta: versione preliminare. Le stime possono cambiare quando aggiorniamo dati e metodi.",es:"Beta: versión preliminar. Las estimaciones pueden cambiar cuando actualicemos los datos y métodos.",de:"Beta: frühe Version. Die Schätzungen können sich ändern, wenn Daten und Methoden aktualisiert werden."};
+var LAR={en:"Language",it:"Lingua",es:"Idioma",de:"Sprache"};
+function setLang(l){if(!TABS[l])l="en";[].forEach.call(document.querySelectorAll("#tabs a"),function(a,i){a.textContent=TABS[l][i];});
+  var n=$("langNote");n.textContent=LNOTE[l]||"";n.hidden=!LNOTE[l];$("beta").title=BETA[l];$("langs").value=l;$("langs").setAttribute("aria-label",LAR[l]);}
+(function(){var l="en";try{l=localStorage.getItem("honesttag.lang")||(navigator.language||"").slice(0,2).toLowerCase();}catch(e){}
+  setLang(TABS[l]?l:"en");
+  $("langs").addEventListener("change",function(){var l=this.value;try{localStorage.setItem("honesttag.lang",l);}catch(e){}setLang(l);});
+  try{var h=JSON.parse(localStorage.getItem("honesttag.handoff")||"null");
+    if(h&&GAR[h.g]&&Array.isArray(h.blend)&&h.blend.length&&h.blend.every(function(x){return FIB[x[0]]&&isFinite(x[1]);})&&CTRY[h.o]&&DEST[h.d]&&EN[h.temp]&&EOLS.indexOf(h.eol)>-1&&h.wears>=1&&h.wt>=20){
+      S.g=h.g;S.wt=Math.round(h.wt);S.blend=h.blend.map(function(x){return [x[0],x[1]];});S.o=h.o;S.d=h.d;S.m=h.m||GAR[h.g].m;S.eol=h.eol;S.temp=+h.temp;S.dry=!!h.dry;
+      S.years=1;S.wpy=Math.round(h.wears);S.wash=Math.min(Math.round(h.washes||0),S.wpy);S.size="";$("fromHome").hidden=false;}}catch(e){}
+})();
+buildCtl();renderCats();render();
+// highlight the phase in view
+try{var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){document.querySelectorAll(".iso a").forEach(function(a){a.classList.toggle("on",a.dataset.ph===x.target.id);});}});},{rootMargin:"-40% 0px -55% 0px"});
+  document.querySelectorAll("section.phase").forEach(function(s){io.observe(s);});}catch(err){}
+
+</script>
+
+</body>
+</html>
